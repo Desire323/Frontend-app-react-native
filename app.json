@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "hello-react-native",
-    "slug": "hello-react-native",
+    "name": "native2",
+    "slug": "native2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions  } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import GifPlayer from 'react-native-gif';
+import LoginPage from './LoginPage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -18,10 +18,9 @@ function HelloWorldScreen({ navigation }) {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleTextPress}>
       <Text style={styles.text}>Hello World!</Text>
-        <GifPlayer
+      <Image
           source={require('./assets/gifs/tv.gif')}
           style={styles.gif}
-          resizeMode="contain"
           autoplay
           loop
         />
@@ -39,8 +38,11 @@ function WelcomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleTextPress}>
-        <Text style={styles.text}>Welcome to our app</Text>
+        <Text style={styles.text}>Welcome</Text>
+        <Text style={styles.text}>to our</Text>
+        <Text style={styles.text}>app</Text>
       </TouchableOpacity>
+      <LoginPage></LoginPage>
       <StatusBar style="auto" />
     </View>
   );
@@ -76,6 +78,11 @@ export default function App() {
             component={WelcomeScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Login"
+            component={LoginPage}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       ) : null}
     </NavigationContainer>
@@ -100,7 +107,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'press-start',
-    fontSize: 40,
+    fontSize: 35,
     textAlign: 'center', // Align text in the center
   },
 });
