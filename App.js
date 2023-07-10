@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './LoginPage';
+import Camera from './Camera';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -32,7 +33,7 @@ function HelloWorldScreen({ navigation }) {
 
 function WelcomeScreen({ navigation }) {
   const handleTextPress = () => {
-    navigation.navigate('HelloWorld');
+    navigation.navigate('Camera');
   };
 
   return (
@@ -71,6 +72,11 @@ export default function App() {
           <Stack.Screen
             name="HelloWorld"
             component={HelloWorldScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Camera"
+            component={Camera}
             options={{ headerShown: false }}
           />
           <Stack.Screen
