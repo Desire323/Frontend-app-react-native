@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions, Platform, TouchableOpacity, Button, Image } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import IconButton from './IconButton'
 
-export default function App() {
+function MyCamera() {
   //  camera permissions
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -144,13 +145,16 @@ export default function App() {
               });
             }}
           >
+            <View style={styles.upperButton}>
+              
+              <IconButton icon={"retweet"}onPress={retakePicture}></IconButton>
+              <Button title="Save" onPress={savePicture}></Button>
+            </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-                <Text style={styles.text}>Flip Camera</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={takePicture}>
-                <Text style={styles.text}>Take Picture</Text>
-              </TouchableOpacity>
+
+              <IconButton icon={"controller-stop"} size={60}></IconButton>
+              <IconButton icon={"circle"} onPress={takePicture} size={80}></IconButton>
+              <IconButton icon={"retweet"} onPress={toggleCameraType} size={40}></IconButton>
             </View>
           </Camera>
         ) : (
@@ -183,7 +187,8 @@ const styles = StyleSheet.create({
   },
   cameraPreview: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    // justifyContent: 'flex-end',
   },
   camera: {
     flex: 1,
@@ -192,11 +197,21 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    alignSelf: 'center',
+    // alignSelf: 'center',
+    alignItems:'center',
+    justifyContent: "space-between",
+    margin: 10
   },
   button: {
     alignItems: 'center',
     margin: 10,
+  },
+  upperButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 30,
+    // borderWidth: 10,
+    // borderColor: 'pink'
   },
   text: {
     fontSize: 24,
@@ -204,3 +219,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default MyCamera;
