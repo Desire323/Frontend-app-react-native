@@ -5,7 +5,7 @@ import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './LoginPage';
-import Camera from './Camera';
+import MyCamera from './Camera';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -76,7 +76,7 @@ export default function App() {
           />
           <Stack.Screen
             name="Camera"
-            component={Camera}
+            component={MyCamera}
             options={{ headerShown: false }}
           />
           <Stack.Screen
