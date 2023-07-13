@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, Platform, TouchableOpacity, Button, Image } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Platform, BackHandler, Button, Image } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import IoniconsIcon from './icons/IconIonicons'
 import { useNavigation } from '@react-navigation/native';
-import EntypoIcon from './icons/EntypoIcon';
+import Icon from './Icon';
 
 function MyCamera() {
   //  camera permissions
@@ -27,16 +26,29 @@ function MyCamera() {
   const navigation = useNavigation();
   const goBack = () => {
     navigation.goBack();
-  }
+  }  
   // on screen  load, ask for permission to use the camera
   useEffect(() => {
-    async function getCameraStatus() {
-      MediaLibrary.requestPermissionsAsync();
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (photo) {
+        retakePicture();
+        return true;
+      } else {
+        return false;
+      }
+    });
+  
+    (async () => {
+      await MediaLibrary.requestPermissionsAsync();
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(status == 'granted');
-    }
-    getCameraStatus();
-  }, []);
+      setHasCameraPermission(status === 'granted');
+    })();
+  
+    return () => {
+      backHandler.remove();
+    };
+  }, [photo]);
+  
 
   function toggleCameraType() {
     setType((current) =>
@@ -155,20 +167,20 @@ function MyCamera() {
           >
             <View style={styles.upperButtons}>
               
-              <EntypoIcon icon={"cross"} onPress={goBack} size={40}></EntypoIcon>
-              <EntypoIcon icon={"flash"} color={flashIconColor} onPress={() => {
+              <Icon icon={"cross"} onPress={goBack} size={40}></Icon>
+              <Icon icon={"flash"} color={flashIconColor} onPress={() => {
                   flash === Camera.Constants.FlashMode.off
                   ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
                   : (setFlash(Camera.Constants.FlashMode.off), setFlashIconColor("white"), console.log(flash))
 
-              }} size={40}></EntypoIcon>
+              }} size={40}></Icon>
               {/* <Button onPress={savePicture}></Button> */}
             </View>
             <View style={styles.buttonContainer}>
 
-              <EntypoIcon icon={"controller-stop"} size={60}></EntypoIcon>
-              <EntypoIcon icon={"circle"} onPress={takePicture} size={80}></EntypoIcon>
-              <EntypoIcon icon={"retweet"} onPress={toggleCameraType} size={40}></EntypoIcon>
+              <Icon icon={"controller-stop"} size={60}></Icon>
+              <Icon icon={"circle"} onPress={takePicture} size={80}></Icon>
+              <Icon icon={"retweet"} onPress={toggleCameraType} size={40}></Icon>
             </View>
           </Camera>
         ) : (
