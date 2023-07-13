@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './components/LoginPage';
 import MyCamera from './components/Camera';
+import PhotoPicker from './components/PhotoPicker';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -77,6 +78,11 @@ export default function App() {
           <Stack.Screen
             name="Camera"
             component={MyCamera}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Gallery"
+            component={PhotoPicker}
             options={{ headerShown: false }}
           />
           <Stack.Screen

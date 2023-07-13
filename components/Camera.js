@@ -167,7 +167,7 @@ function MyCamera() {
           >
             <View style={styles.upperButtons}>
               
-              <Icon icon={"cross"} onPress={goBack} size={40}></Icon>
+              <Icon icon={"cross"} onPress={()=>{goBack(); navigation.navigate("Gallery")}} size={40}></Icon>
               <Icon icon={"flash"} color={flashIconColor} onPress={() => {
                   flash === Camera.Constants.FlashMode.off
                   ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
@@ -178,7 +178,7 @@ function MyCamera() {
             </View>
             <View style={styles.buttonContainer}>
 
-              <Icon icon={"controller-stop"} size={60}></Icon>
+              <Icon icon={"controller-stop"} onPress={goBack}size={60}></Icon>
               <Icon icon={"circle"} onPress={takePicture} size={80}></Icon>
               <Icon icon={"retweet"} onPress={toggleCameraType} size={40}></Icon>
             </View>
