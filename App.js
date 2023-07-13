@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginPage from './LoginPage';
-import MyCamera from './Camera';
+import LoginPage from './components/LoginPage';
+import MyCamera from './components/Camera';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

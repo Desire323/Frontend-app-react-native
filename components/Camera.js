@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions, Platform, TouchableOpacity, Button, Image } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import IconButton from './IconButton'
+import IoniconsIcon from './icons/IconIonicons'
+import { useNavigation } from '@react-navigation/native';
+import EntypoIcon from './icons/EntypoIcon';
 
 function MyCamera() {
   //  camera permissions
@@ -18,8 +20,14 @@ function MyCamera() {
   const [type, setType] = useState(CameraType.back);
   const [photo, setPhoto] = useState(null);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [flashIconColor, setFlashIconColor] = useState("white")
+
   const cameraRef = useRef(camera);
 
+  const navigation = useNavigation();
+  const goBack = () => {
+    navigation.goBack();
+  }
   // on screen  load, ask for permission to use the camera
   useEffect(() => {
     async function getCameraStatus() {
@@ -145,16 +153,22 @@ function MyCamera() {
               });
             }}
           >
-            <View style={styles.upperButton}>
+            <View style={styles.upperButtons}>
               
-              <IconButton icon={"retweet"}onPress={retakePicture}></IconButton>
-              <Button title="Save" onPress={savePicture}></Button>
+              <EntypoIcon icon={"cross"} onPress={goBack} size={40}></EntypoIcon>
+              <EntypoIcon icon={"flash"} color={flashIconColor} onPress={() => {
+                  flash === Camera.Constants.FlashMode.off
+                  ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
+                  : (setFlash(Camera.Constants.FlashMode.off), setFlashIconColor("white"), console.log(flash))
+
+              }} size={40}></EntypoIcon>
+              {/* <Button onPress={savePicture}></Button> */}
             </View>
             <View style={styles.buttonContainer}>
 
-              <IconButton icon={"controller-stop"} size={60}></IconButton>
-              <IconButton icon={"circle"} onPress={takePicture} size={80}></IconButton>
-              <IconButton icon={"retweet"} onPress={toggleCameraType} size={40}></IconButton>
+              <EntypoIcon icon={"controller-stop"} size={60}></EntypoIcon>
+              <EntypoIcon icon={"circle"} onPress={takePicture} size={80}></EntypoIcon>
+              <EntypoIcon icon={"retweet"} onPress={toggleCameraType} size={40}></EntypoIcon>
             </View>
           </Camera>
         ) : (
@@ -206,10 +220,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
-  upperButton: {
+  upperButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 30,
+    padding: 15,
     // borderWidth: 10,
     // borderColor: 'pink'
   },
