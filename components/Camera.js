@@ -3,6 +3,9 @@ import { StyleSheet, View, Text, Dimensions, Platform, BackHandler, Button, Imag
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
+import { BottomSheet } from 'react-native-btr';
+import Gallery from './Gallery'
+
 import Icon from './Icon';
 
 function MyCamera() {
@@ -20,6 +23,7 @@ function MyCamera() {
   const [photo, setPhoto] = useState(null);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const [flashIconColor, setFlashIconColor] = useState("white")
+  const [visible, setVisible] = useState(false)
 
   const cameraRef = useRef(camera);
 
@@ -37,7 +41,7 @@ function MyCamera() {
         return false;
       }
     });
-  
+    
     (async () => {
       await MediaLibrary.requestPermissionsAsync();
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -129,7 +133,9 @@ function MyCamera() {
     }
   }
 
-  // the camera must be loaded in order to access the supported ratios
+  const toggleBottomNavigationView = () => {
+    setVisible(!visible);
+  };
   const setCameraReady = async () => {
     if (!isRatioSet) {
       await prepareRatio();
@@ -167,18 +173,24 @@ function MyCamera() {
           >
             <View style={styles.upperButtons}>
               
-              <Icon icon={"cross"} onPress={()=>{goBack(); navigation.navigate("Gallery")}} size={40}></Icon>
+              <Icon icon={"cross"} onPress={goBack} size={40}></Icon>
               <Icon icon={"flash"} color={flashIconColor} onPress={() => {
                   flash === Camera.Constants.FlashMode.off
                   ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
                   : (setFlash(Camera.Constants.FlashMode.off), setFlashIconColor("white"), console.log(flash))
-
               }} size={40}></Icon>
               {/* <Button onPress={savePicture}></Button> */}
             </View>
             <View style={styles.buttonContainer}>
-
-              <Icon icon={"controller-stop"} onPress={goBack}size={60}></Icon>
+            <BottomSheet style={styles.bottomSheet}
+          visible={visible}
+          //setting the visibility state of the bottom shee
+          onBackButtonPress={toggleBottomNavigationView}
+          //Toggling the visibility state on the click of the back botton
+          onBackdropPress={toggleBottomNavigationView}
+          //Toggling the visibility state on the clicking out side of the sheet
+        ><Gallery/></BottomSheet>
+              <Icon icon={"controller-stop"} onPress={toggleBottomNavigationView}size={60}></Icon>
               <Icon icon={"circle"} onPress={takePicture} size={80}></Icon>
               <Icon icon={"retweet"} onPress={toggleCameraType} size={40}></Icon>
             </View>
@@ -214,7 +226,6 @@ const styles = StyleSheet.create({
   cameraPreview: {
     flex: 1,
     justifyContent: 'space-between',
-    // justifyContent: 'flex-end',
   },
   camera: {
     flex: 1,
@@ -223,7 +234,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    // alignSelf: 'center',
     alignItems:'center',
     justifyContent: "space-between",
     margin: 10
@@ -236,12 +246,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
-    // borderWidth: 10,
-    // borderColor: 'pink'
+    marginTop: 10
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: 'white',
+  },
+  bottomSheet: {
+    height:100,
     color: 'white',
   },
 });
