@@ -6,8 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HelloWorldScreen from './components/HelloWorld';
-import LoginPage from './components/Auth/LoginPage';
-import RegisterPage from './components/Auth/RegisterPage';
+import LoginPage from './components/auth/LoginPage';
+import RegisterPage from './components/auth/RegisterPage';
 import MyCamera from './components/Camera';
 import Gallery from './components/Gallery';
 import Fortune  from './components/Fortune';
