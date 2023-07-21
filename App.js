@@ -1,38 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginPage from './components/LoginPage';
+
+import HelloWorldScreen from './components/HelloWorld';
+import LoginPage from './components/Auth/LoginPage';
+import RegisterPage from './components/Auth/RegisterPage';
 import MyCamera from './components/Camera';
 import Gallery from './components/Gallery';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-function HelloWorldScreen({ navigation }) {
-  const handleTextPress = () => {
-    navigation.navigate('Welcome');
-  };
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handleTextPress}>
-      <Text style={styles.text}>Hello World!</Text>
-      <Image
-          source={require('./assets/gifs/tv.gif')}
-          style={styles.gif}
-          autoplay
-          loop
-        />
-      </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import Fortune  from './components/Fortune';
 
 function WelcomeScreen({ navigation }) {
+  const [state, setState] = useState(true);
   const handleTextPress = () => {
     navigation.navigate('Camera');
   };
@@ -44,7 +25,10 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.text}>to our</Text>
         <Text style={styles.text}>app</Text>
       </TouchableOpacity>
-      <LoginPage></LoginPage>
+
+      { state ? <LoginPage state={state} setState={setState}/>
+       : <RegisterPage state={state} setState={setState}/>
+      }
       <StatusBar style="auto" />
     </View>
   );
@@ -70,33 +54,33 @@ export default function App() {
     <NavigationContainer>
       {fontLoaded ? (
         <Stack.Navigator initialRouteName="HelloWorld">
-          <Stack.Screen
-            name="HelloWorld"
-            component={HelloWorldScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Camera"
-            component={MyCamera}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Gallery"
-            component={Gallery}
-            // component={PhotoPicker}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginPage}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
+        <Stack.Screen
+          name="HelloWorld"
+          component={HelloWorldScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Camera"
+          component={MyCamera}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Gallery"
+          component={Gallery}
+          // component={PhotoPicker}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Fortune"
+          component={Fortune}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>      
       ) : null}
     </NavigationContainer>
   );
@@ -114,10 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  gif: {
-    width: windowWidth * 0.6, // Adjust the width as needed
-    height: windowHeight * 0.4, // Adjust the height as needed
-  },
+
   text: {
     fontFamily: 'press-start',
     fontSize: 35,
