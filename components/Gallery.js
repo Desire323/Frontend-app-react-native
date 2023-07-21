@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, FlatList, Dimensions, BackHandler, TouchableWithoutFeedback, TouchableOpacity, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
-import { BottomSheet } from 'react-native-btr';
 
 function PhotoPicker() {
-  const [visible, setVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [photos, setPhotos] = useState([]);
   
