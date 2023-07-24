@@ -11,11 +11,14 @@ import RegisterPage from './components/auth/RegisterPage';
 import MyCamera from './components/Camera';
 import Gallery from './components/Gallery';
 import Fortune  from './components/Fortune';
+import Bomb from './components/Bomb';
+import MovingImage from './components/MovingImage';
+import Barbie from './components/Barbie';
 
 function WelcomeScreen({ navigation }) {
   const [state, setState] = useState(true);
   const handleTextPress = () => {
-    navigation.navigate('Camera');
+    navigation.navigate('Barbie');
   };
 
   return (
@@ -42,6 +45,7 @@ export default function App() {
   const loadFont = async () => {
     await Font.loadAsync({
       'press-start': require('./assets/fonts/PressStart2P-Regular.ttf'),
+      'barbie': require('./assets/fonts/barbie.ttf'),
     });
     setFontLoaded(true);
   };
@@ -62,6 +66,11 @@ export default function App() {
         <Stack.Screen
           name="Camera"
           component={MyCamera}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Barbie"
+          component={Barbie}
           options={{ headerShown: false }}
         />
         <Stack.Screen
