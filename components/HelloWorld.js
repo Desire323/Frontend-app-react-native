@@ -1,5 +1,6 @@
 import {View, Text, StatusBar, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -8,7 +9,12 @@ function HelloWorldScreen(windowWidth, windowHeight) {
     
     const navigation = useNavigation();
     const handleTextPress = () => {
-      navigation.navigate('Welcome');
+      if (AsyncStorage.getItem('token') !== null) {
+        navigation.navigate('Fortune');
+      }
+      else {
+        navigation.navigate('Welcome');
+      }
     };
   
     return (
