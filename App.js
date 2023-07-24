@@ -11,14 +11,14 @@ import RegisterPage from './components/auth/RegisterPage';
 import MyCamera from './components/Camera';
 import Gallery from './components/Gallery';
 import Fortune  from './components/Fortune';
-import Bomb from './components/Bomb';
-import MovingImage from './components/MovingImage';
-import Barbie from './components/Barbie';
+import Bomb from './components/animations/Bomb';
+import MovingImage from './components/animations/MovingImage';
+import Barbie from './components/animations/Barbie';
 
 function WelcomeScreen({ navigation }) {
   const [state, setState] = useState(true);
   const handleTextPress = () => {
-    navigation.navigate('Barbie');
+    navigation.navigate('Fortune');
   };
 
   return (
@@ -46,6 +46,8 @@ export default function App() {
     await Font.loadAsync({
       'press-start': require('./assets/fonts/PressStart2P-Regular.ttf'),
       'barbie': require('./assets/fonts/barbie.ttf'),
+      'oppenheimer' : require('./assets/fonts/BungeeSpice-Regular.ttf'),
+      // 'oppenheimer' : require('./assets/fonts/GothamNarrowBold.otf'),
     });
     setFontLoaded(true);
   };
