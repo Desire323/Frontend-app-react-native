@@ -11,4 +11,15 @@ const fortune_random = async (token) => {
     }
 }
 
-export default fortune_random;
+const fortune_history = async (token) => {
+    try {
+        const response = await ApiManager.get('/fortune/history', {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data ? response.data : response;
+    } catch (error) {  
+        return error.response && error.response.data ? error.response.data : error;
+    }
+}
+
+export { fortune_random, fortune_history };
