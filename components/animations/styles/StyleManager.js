@@ -30,7 +30,6 @@ const defaultStyles = StyleSheet.create({
       textAlign: 'center',
       paddingHorizontal: 8,
       lineHeight: 50,
-      resizeMode: 'contain',
     },
     question: {
       fontFamily: 'press-start',
@@ -38,7 +37,6 @@ const defaultStyles = StyleSheet.create({
       alignSelf: 'center',
       textAlign: 'center',
       paddingHorizontal: 8,
-      // lineHeight: 50,
     },
   });
   

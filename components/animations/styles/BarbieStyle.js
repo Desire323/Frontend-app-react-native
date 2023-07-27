@@ -8,13 +8,13 @@ const barbieStyles = StyleSheet.create({
       backgroundColor: "#FF69B4",
     },
     text: {
-      fontFamily: 'press-start',
-      fontSize: 30,
+      fontFamily: 'barbie',
+      fontSize: 50,
       color: 'white',
       alignSelf: 'center',
       textAlign: 'center',
       paddingHorizontal: 8,
-      lineHeight: 50,
+      lineHeight: 70,
     },
     question: {
       fontFamily: 'press-start',
