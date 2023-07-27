@@ -11,9 +11,9 @@ import RegisterPage from './components/auth/RegisterPage';
 import MyCamera from './components/Camera';
 import Gallery from './components/Gallery';
 import Fortune  from './components/Fortune';
-import Bomb from './components/animations/Bomb';
-import MovingImage from './components/animations/MovingImage';
 import Barbie from './components/animations/Barbie';
+import History from './components/History';
+
 
 function WelcomeScreen({ navigation }) {
   const [state, setState] = useState(true);
@@ -89,6 +89,11 @@ export default function App() {
         <Stack.Screen
           name="Fortune"
           component={Fortune}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      
