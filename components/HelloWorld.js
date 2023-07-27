@@ -1,12 +1,28 @@
+import React, { useEffect } from 'react';
 import {View, Text, StatusBar, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { checkTokenExpiration } from './auth/authUtils'; 
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-function HelloWorldScreen(windowWidth, windowHeight) {
-    
+function HelloWorldScreen() {
+  useEffect(() => {
+    handleTokenExpiration();
+  }, []);
+
+  const handleTokenExpiration = async () => {
+    const isTokenValid = await checkTokenExpiration();
+
+    if (!isTokenValid) {
+      navigation.navigate('Welcome');
+    } else {
+      navigation.navigate('HelloWorld');
+    }
+  };
+  
     const navigation = useNavigation();
     const handleTextPress = () => {
       if (AsyncStorage.getItem('token') !== null) {
@@ -46,13 +62,13 @@ function HelloWorldScreen(windowWidth, windowHeight) {
       justifyContent: 'center',
     },
     gif: {
-      width: windowWidth * 0.6, // Adjust the width as needed
-      height: windowHeight * 0.4, // Adjust the height as needed
+      width: windowWidth * 0.6,
+      height: windowHeight * 0.4, 
     },
     text: {
       fontFamily: 'press-start',
       fontSize: 35,
-      textAlign: 'center', // Align text in the center
+      textAlign: 'center',
     },
   });
   
