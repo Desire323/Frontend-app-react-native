@@ -21,7 +21,7 @@ function HelloWorldScreen() {
       setName(name);
     };
     getName();
-  }, []);
+  }, [AsyncStorage.getItem('firstname')]);
 
   const handleTokenExpiration = async () => {
     const isTokenValid = await checkTokenExpiration();
