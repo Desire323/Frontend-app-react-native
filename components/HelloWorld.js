@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {View, Text, StatusBar, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +11,16 @@ const windowHeight = Dimensions.get('window').height;
 function HelloWorldScreen() {
   useEffect(() => {
     handleTokenExpiration();
+  }, []);
+
+  const [name, setName] = useState("World")
+
+  useEffect(() => {
+    const getName = async () => {
+      const name = await AsyncStorage.getItem('firstname');
+      setName(name);
+    };
+    getName();
   }, []);
 
   const handleTokenExpiration = async () => {
@@ -35,8 +45,10 @@ function HelloWorldScreen() {
   
     return (
       <View style={styles.container}>
+        
+        <Text style={styles.text}> Hello,</Text>
+        <Text style={styles.text}>{name}</Text>
         <TouchableOpacity onPress={handleTextPress}>
-        <Text style={styles.text}>Hello World!</Text>
         <Image
             source={require('./../assets/gifs/tv.gif')}
             style={styles.gif}
@@ -69,6 +81,7 @@ function HelloWorldScreen() {
       fontFamily: 'press-start',
       fontSize: 35,
       textAlign: 'center',
+      lineHeight: 50,
     },
   });
   
