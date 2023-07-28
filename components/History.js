@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import StyleManager from "./animations/styles/StyleManager";
 import { checkTokenExpiration } from "./auth/authUtils";
 import Button from "./Button";
-import TimestampToDate from "./TimestampToDate";
+import TimestampToDate from "./dateTime/TimestampToDate";
 
 function History() {
     
