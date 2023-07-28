@@ -36,7 +36,7 @@ const Barbie = () => {
       
       <Animated.View style={{ opacity: fadeAnimation }}>
         <Image
-          source={require('./../assets/images/barbiePixel.png')}
+          source={require('./../../assets/images/barbiePixel.png')}
           style={styles.image}
           resizeMode="contain"
         />
@@ -55,15 +55,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: 100,
-    backgroundColor: '#FF69B4',
-    borderWidth:1,
   },
   image: {
     backgroundColor: 'white',
     borderRadius: 20,
     width: Dimensions.get('window').width / 1.25,
     height: Dimensions.get('window').width / 2,
-    borderWidth:1,
   },
 });
 

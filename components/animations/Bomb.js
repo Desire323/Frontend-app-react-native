@@ -47,7 +47,7 @@ const Bomb = () => {
         <View style={styles.container}>
           <Animated.View style={[styles.fallingElement, { top: fallValue }]}>
             <Image
-              source={require('./../assets/images/bomb.png')}
+              source={require('./../../assets/images/bomb.png')}
               style={styles.image}
               resizeMode="contain"
             />
@@ -60,7 +60,7 @@ const Bomb = () => {
             ]}
           >
             <Image
-              source={require('./../assets/images/boom.png')}
+              source={require('./../../assets/images/boom.png')}
               style={styles.boom}
               resizeMode="contain"
             />
@@ -93,8 +93,8 @@ const Bomb = () => {
     },
     boom: {
         // alignSelf:'flex-end',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').width + 100,
+        width: Dimensions.get('window').width + 50,
+        height: Dimensions.get('window').width,
         // border: 'red',
         // borderWidth: 5,
     },

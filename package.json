@@ -13,6 +13,7 @@
     "@expo/webpack-config": "^18.0.1",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-community/cameraroll": "^4.1.2",
+    "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
     "axios": "^1.4.0",
