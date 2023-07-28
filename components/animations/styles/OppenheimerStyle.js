@@ -22,7 +22,6 @@ const oppenheimerStyles = StyleSheet.create({
       alignSelf: 'center',
       textAlign: 'center',
       paddingHorizontal: 8,
-      // lineHeight: 50,
     },
   });
 
