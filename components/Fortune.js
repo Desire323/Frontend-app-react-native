@@ -8,6 +8,7 @@ import StyleManager from './animations/styles/StyleManager';
 import { checkTokenExpiration } from './auth/authUtils';
 import {isToday} from "./dateTime/DateTimeUtils";
 
+
 function Fortune() {
   const navigation = useNavigation();
   const [fortune, setFortune] = useState(null);
