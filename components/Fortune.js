@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {fortune_random} from './api/fortune_api';
+import {fortune_random, fortune_history_last} from './api/fortune_api';
 import Animation from './animations/Animation';
 import StyleManager from './animations/styles/StyleManager';
 import { checkTokenExpiration } from './auth/authUtils';
+import {isToday} from "./dateTime/DateTimeUtils";
 
 function Fortune() {
   const navigation = useNavigation();
@@ -32,24 +33,55 @@ function Fortune() {
     if (!isTokenValid) {
         navigation.navigate('Welcome');
     }};
+    
 
   const fetchFortune = async () => {
     const token = await AsyncStorage.getItem('token');
-    const response = await fortune_random(token);
+    const lastReceivedDate = await AsyncStorage.getItem('lastReceivedDate');
+    const lastFortune = await AsyncStorage.getItem('lastFortune');
 
-    if(typeof response === 'object' && response.status === 500){
-      await AsyncStorage.removeItem('token')
-      navigation.navigate("Welcome")
+    let response = null;
+    if (!lastReceivedDate) {
+      try{
+        if(lastFortune){
+          response = lastFortune;
+        }
+        else{
+          response = await fortune_history_last(token)[0];
+        }
+
+        if(response){
+          setFortune(response.wish);
+          setTheme(response.theme);
+          AsyncStorage.setItem('lastReceivedDate', response.date);
+        }
+      } catch (error) {
+        console.log('No history found');
+      }
     }
-  
-    if(response){
-      setAnimation(true);
-      setTheme(response.theme);
-      setFortune(response.wish);
-      setTimeout(() => {
-        setAnimation(false);
-      }, 3500);
+    else if (isToday(lastReceivedDate)) {
+      console.log('You already received a fortune today!');
+      response = lastFortune;
     }
+    else {
+      response = await fortune_random(token);
+      if(typeof response === 'object' && response.status === 500){
+        await AsyncStorage.removeItem('token')
+        navigation.navigate("Welcome")
+      }
+    }
+    const responseArr = await fortune_history_last(token);
+  response = responseArr[0];
+      if(response){
+        setAnimation(true);
+        setTheme(response.theme);
+        setFortune(response.wish);
+        AsyncStorage.setItem('lastReceivedDate', (Date.now()).toString());
+        setTimeout(() => {
+          setAnimation(false);
+        }, 3500);
+      }
+    
   };
 
   return (
