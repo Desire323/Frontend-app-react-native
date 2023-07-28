@@ -27,8 +27,13 @@ function LoginPage({ state, setState }) {
       password: password
     }).then((response) => {
       if (response.status === 200) {
-        AsyncStorage.setItem('token', response.data);
+
+        console.log(`response:\n\ttoken: ${response.data.token}\n\tfirstname: ${response.data.firstname}\n\tlastname: ${response.data.lastname}`)
+        AsyncStorage.setItem('token', response.data.jwt);
+        AsyncStorage.setItem('firstname', response.data.firstname);
+        AsyncStorage.setItem('lastname', response.data.lastname);
         AsyncStorage.setItem('email', email);
+
         try{
         navigation.navigate('Fortune');
         } catch (error) {
