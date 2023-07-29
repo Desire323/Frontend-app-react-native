@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkTokenExpiration } from './auth/authUtils'; 
 
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -18,7 +17,7 @@ function HelloWorldScreen() {
   useEffect(() => {
     const getName = async () => {
       const name = await AsyncStorage.getItem('firstname');
-      setName(name);
+      setName(name ? name : 'World');
     };
     getName();
   }, [AsyncStorage.getItem('firstname')]);
