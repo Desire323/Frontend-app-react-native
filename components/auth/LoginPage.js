@@ -28,7 +28,6 @@ function LoginPage({ state, setState }) {
     }).then((response) => {
       if (response.status === 200) {
 
-        console.log(`response:\n\ttoken: ${response.data.token}\n\tfirstname: ${response.data.firstname}\n\tlastname: ${response.data.lastname}`)
         AsyncStorage.setItem('token', response.data.jwt);
         AsyncStorage.setItem('firstname', response.data.firstname);
         AsyncStorage.setItem('lastname', response.data.lastname);
