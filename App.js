@@ -12,6 +12,8 @@ import Fortune  from './components/Fortune';
 import Barbie from './components/animations/Barbie';
 import History from './components/History';
 import WelcomeScreen from './components/WelcomeScreen';
+import Profile from './components/Profile';
+import Settings from './components/Settings';
 
 const Stack = createStackNavigator();
 
@@ -70,6 +72,16 @@ export default function App() {
         <Stack.Screen
           name="History"
           component={History}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      
