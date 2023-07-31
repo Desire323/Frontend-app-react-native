@@ -7,6 +7,7 @@ import Animation from './animations/Animation';
 import StyleManager from './animations/styles/StyleManager';
 import { checkTokenExpiration } from './auth/authUtils';
 import {isToday} from "./dateTime/DateTimeUtils";
+import TabBar from './TabBar';
 
 
 function Fortune() {
@@ -104,6 +105,7 @@ function Fortune() {
           </TouchableOpacity>
         </View>
       )}
+      <TabBar/>
     </View>
   );
 };

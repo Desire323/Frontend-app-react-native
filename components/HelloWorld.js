@@ -3,6 +3,7 @@ import {View, Text, StatusBar, StyleSheet, TouchableOpacity, Image, Dimensions} 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkTokenExpiration } from './auth/authUtils'; 
+import TabBar from './TabBar'; 
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -55,6 +56,7 @@ function HelloWorldScreen() {
             loop
           />
         </TouchableOpacity>
+        <TabBar/>
         <StatusBar style="auto" />
       </View>
     );
