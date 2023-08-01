@@ -16,7 +16,9 @@
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
+    "@stomp/stompjs": "^7.0.0",
     "axios": "^1.4.0",
+    "big-integer": "^1.6.51",
     "expo": "~48.0.18",
     "expo-camera": "~13.2.1",
     "expo-constants": "~14.2.1",
@@ -36,7 +38,9 @@
     "react-native-gif": "^1.0.3",
     "react-native-permissions": "^3.8.4",
     "react-native-safe-area-context": "4.5.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "sockjs-client": "^1.6.1",
+    "text-encoding": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
