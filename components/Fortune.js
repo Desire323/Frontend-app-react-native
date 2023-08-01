@@ -44,7 +44,9 @@ function Fortune() {
 
     let response = null;
     if (!lastReceivedDate) {
+      console.log('No lastReceivedDate found');
       try{
+        await AsyncStorage.removeItem('lastFortune');
         if(lastFortune){
           response = lastFortune;
         }
@@ -57,32 +59,36 @@ function Fortune() {
           setTheme(response.theme);
           AsyncStorage.setItem('lastReceivedDate', response.date);
         }
+        else if (isToday(lastReceivedDate)) {
+          console.log('You already received a fortune today!');
+          response = lastFortune;
+        }
+        else {
+          response = await fortune_random(token);
+          if(typeof response === 'object' && response.status === 500){
+            await AsyncStorage.removeItem('token')
+            navigation.navigate("Welcome")
+          }
+        }
       } catch (error) {
         console.log('No history found');
       }
     }
-    else if (isToday(lastReceivedDate)) {
-      console.log('You already received a fortune today!');
-      response = lastFortune;
-    }
-    else {
-      response = await fortune_random(token);
-      if(typeof response === 'object' && response.status === 500){
-        await AsyncStorage.removeItem('token')
-        navigation.navigate("Welcome")
-      }
-    }
+    
     const responseArr = await fortune_history_last(token);
-  response = responseArr[0];
-      if(response){
-        setAnimation(true);
-        setTheme(response.theme);
-        setFortune(response.wish);
-        AsyncStorage.setItem('lastReceivedDate', (Date.now()).toString());
-        setTimeout(() => {
-          setAnimation(false);
-        }, 3500);
+    response = responseArr[0];
+      if(!response){
+        response = await fortune_random(token);
       }
+
+      setAnimation(true);
+      setTheme(response.theme);
+      setFortune(response.wish);
+      AsyncStorage.setItem('lastReceivedDate', (Date.now()).toString());
+      setTimeout(() => {
+        setAnimation(false);
+      }, 3500);
+      
     
   };
 
@@ -105,7 +111,7 @@ function Fortune() {
           </TouchableOpacity>
         </View>
       )}
-      <TabBar/>
+      {!animation && <TabBar/>}
     </View>
   );
 };
