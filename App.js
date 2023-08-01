@@ -1,5 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +12,8 @@ import History from './components/History';
 import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
+import ChatsList from './components/ChatsList';
+import Chat from './components/Chat';
 
 const Stack = createStackNavigator();
 
@@ -82,6 +82,16 @@ export default function App() {
         <Stack.Screen
           name="Settings"
           component={Settings}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chats"
+          component={ChatsList}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      
