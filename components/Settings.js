@@ -8,11 +8,15 @@ function Settings() {
     const navigation = useNavigation();
 
     const handleLogout = async () => {
-        await AsyncStorage.removeItem('token');
-        await AsyncStorage.setItem('World');
-        await AsyncStorage.removeItem('lastname');
-        await AsyncStorage.removeItem('email');
-        navigation.navigate('Welcome');
+        try {
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.setItem('World');
+            await AsyncStorage.removeItem('lastname');
+            await AsyncStorage.removeItem('email');
+            navigation.navigate('Welcome');
+        } catch (error) {
+            console.log('Error occured while logging out');
+        }
     };
 
     return (
