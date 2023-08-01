@@ -1,6 +1,7 @@
 import {StyleSheet, View, Image, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
+import TabBar from './TabBar';
 
 function Profile() {
 
@@ -22,6 +23,7 @@ function Profile() {
             style={styles.profile}
         />
         <Text style={styles.name}> {firstname} {lastname}</Text>
+        <TabBar/>
         </View>
     )
 }
