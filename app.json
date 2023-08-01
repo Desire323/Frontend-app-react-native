@@ -48,5 +48,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "stompConfig" : {
+    "forceBinaryWSFrames": true,
+    "appendMissingNULLonIncoming": true
   }
 }
