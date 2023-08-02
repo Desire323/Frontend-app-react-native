@@ -37,60 +37,45 @@ function Fortune() {
     }};
     
 
-  const fetchFortune = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const lastReceivedDate = await AsyncStorage.getItem('lastReceivedDate');
-    const lastFortune = await AsyncStorage.getItem('lastFortune');
-
-    let response = null;
-    if (!lastReceivedDate) {
-      console.log('No lastReceivedDate found');
-      try{
-        await AsyncStorage.removeItem('lastFortune');
-        if(lastFortune){
-          response = lastFortune;
-        }
-        else{
-          response = await fortune_history_last(token)[0];
-        }
-
-        if(response){
-          setFortune(response.wish);
-          setTheme(response.theme);
-          AsyncStorage.setItem('lastReceivedDate', response.date);
-        }
-        else if (isToday(lastReceivedDate)) {
-          console.log('You already received a fortune today!');
-          response = lastFortune;
-        }
-        else {
-          response = await fortune_random(token);
-          if(typeof response === 'object' && response.status === 500){
-            await AsyncStorage.removeItem('token')
-            navigation.navigate("Welcome")
-          }
-        }
-      } catch (error) {
-        console.log('No history found');
-      }
-    }
+    const fetchFortune = async () => {
+      const token = await AsyncStorage.getItem('token');
+      let lastReceivedDate = await AsyncStorage.getItem('lastReceivedDate');
+      let lastFortune = await AsyncStorage.getItem('lastFortune');
     
-    const responseArr = await fortune_history_last(token);
-    response = responseArr[0];
-      if(!response){
+      lastFortune = lastFortune ? JSON.parse(lastFortune) : null;
+      lastReceivedDate = lastReceivedDate ? new Date(Number(lastReceivedDate)) : null;
+    
+      let response = null;
+      if (!lastReceivedDate) {
+        response = await fortune_history_last(token)[0];
+        if (response) {
+          await AsyncStorage.setItem('lastReceivedDate', (new Date(response.date)).getTime().toString());
+          await AsyncStorage.setItem('lastFortune', JSON.stringify(response));
+        }
+      }
+    
+      if (lastReceivedDate && isToday(lastReceivedDate)) {
+        console.log('You already received a fortune today!');
+        response = lastFortune;
+      }
+      else {
         response = await fortune_random(token);
+        if (response) {
+          await AsyncStorage.setItem('lastReceivedDate', (Date.now()).toString());
+          await AsyncStorage.setItem('lastFortune', JSON.stringify(response));
+        }
       }
-
-      setAnimation(true);
-      setTheme(response.theme);
-      setFortune(response.wish);
-      AsyncStorage.setItem('lastReceivedDate', (Date.now()).toString());
-      setTimeout(() => {
-        setAnimation(false);
-      }, 3500);
-      
     
-  };
+      if (response) {
+        setAnimation(true);
+        setTheme(response.theme);
+        setFortune(response.wish);
+        setTimeout(() => {
+          setAnimation(false);
+        }, 3500);
+      }
+    };
+    
 
   return (
     <View style={styles.container}>
