@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     profile: {
-        margin: 50,
+        marginTop: 70,
+        marginBottom: 25,
         width: 200,
         height: 200,
         borderRadius: 200 / 2,
