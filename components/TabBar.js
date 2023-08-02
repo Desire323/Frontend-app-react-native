@@ -8,11 +8,11 @@ function TabBar() {
 
     return (
         <View style={styles.container}>  
-            <Icon icon={"account"} color={"black"} onPress={() => navigation.navigate("Profile")}/>
+            <Icon icon={"cat"} color={"black"} onPress={() => navigation.navigate("Profile")}/>
 
             <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chats")}/>
             <Icon icon={"crystal-ball"} color={"black"} onPress={() => navigation.navigate("Fortune")}/>
-            <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chat")}/>
+            <Icon icon={"account-multiple"} color={"black"} onPress={() => navigation.navigate("Friends")}/>
             <Icon icon={"cog"} color={"black"} onPress={() => navigation.navigate("Settings")}/>
 
         </View>

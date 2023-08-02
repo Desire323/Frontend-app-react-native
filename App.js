@@ -14,6 +14,7 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import ChatsList from './components/ChatsList';
 import Chat from './components/Chat';
+import Friends from './components/Friends';
 
 const Stack = createStackNavigator();
 
@@ -92,6 +93,11 @@ export default function App() {
         <Stack.Screen
           name="Chats"
           component={ChatsList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Friends"
+          component={Friends}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      
