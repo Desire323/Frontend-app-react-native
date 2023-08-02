@@ -40,7 +40,9 @@ function ChatsList() {
   };
 
   if (selfId === null) {
-    return <View><Text>Loading...</Text></View>; // Render a loading state if selfId is not loaded
+    return <View>
+              <Text>Loading...</Text>
+          </View>; 
   }
 
   return (

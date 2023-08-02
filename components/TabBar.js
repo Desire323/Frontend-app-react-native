@@ -1,5 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
-import Settings from './Settings';
+import { StyleSheet, View } from 'react-native';
 import Icon from './Icon';
 import { useNavigation } from '@react-navigation/native';
 
@@ -13,7 +12,6 @@ function TabBar() {
 
             <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chats")}/>
             <Icon icon={"crystal-ball"} color={"black"} onPress={() => navigation.navigate("Fortune")}/>
-            {/* <Text>Feed</Text> */}
             <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chat")}/>
             <Icon icon={"cog"} color={"black"} onPress={() => navigation.navigate("Settings")}/>
 
@@ -27,14 +25,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: 50,
-        // backgroundColor: 'red',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'flex-start',
-        // backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
     },
 });
 

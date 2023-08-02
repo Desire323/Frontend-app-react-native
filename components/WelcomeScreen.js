@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     text: {
       fontFamily: 'press-start',
       fontSize: 35,
-      textAlign: 'center', // Align text in the center
+      textAlign: 'center',
     },
   });

@@ -9,13 +9,11 @@ import Gallery from './Gallery'
 import Icon from './Icon';
 
 function MyCamera() {
-  //  camera permissions
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
 
-  // Screen Ratio and image padding
   const [imagePadding, setImagePadding] = useState(0);
-  const [ratio, setRatio] = useState('4:3'); // default is 4:3
+  const [ratio, setRatio] = useState('4:3');
   const { height, width } = Dimensions.get('window');
   const screenRatio = height / width;
   const [isRatioSet, setIsRatioSet] = useState(false);
@@ -31,7 +29,7 @@ function MyCamera() {
   const goBack = () => {
     navigation.goBack();
   }  
-  // on screen  load, ask for permission to use the camera
+
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (photo) {
@@ -60,17 +58,13 @@ function MyCamera() {
     );
   }
 
-  // set the camera ratio and padding.
-  // this code assumes a portrait mode screen
+
   const prepareRatio = async () => {
-    let desiredRatio = '4:3'; // Start with the system default
-    // This issue only affects Android
+    let desiredRatio = '4:3';
+
     if (Platform.OS === 'android') {
       const ratios = await camera.getSupportedRatiosAsync();
 
-      // Calculate the width/height of each of the supported camera ratios
-      // These width/height are measured in landscape mode
-      // find the ratio that is closest to the screen ratio without going over
       let distances = {};
       let realRatios = {};
       let minDistance = null;
@@ -78,7 +72,7 @@ function MyCamera() {
         const parts = ratio.split(':');
         const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
         realRatios[ratio] = realRatio;
-        // ratio can't be taller than screen, so we don't want an abs()
+
         const distance = screenRatio - realRatio;
         distances[ratio] = realRatio;
         if (minDistance == null) {
@@ -89,15 +83,14 @@ function MyCamera() {
           }
         }
       }
-      // set the best match
+
       desiredRatio = minDistance;
-      //  calculate the difference between the camera width and the screen height
+
       const remainder = Math.floor((height - realRatios[desiredRatio] * width) / 2);
-      // set the preview padding and preview ratio
+
       setImagePadding(remainder);
       setRatio(desiredRatio);
-      // Set a flag so we don't do this
-      // calculation each time the screen refreshes
+
       setIsRatioSet(true);
     }
   };
@@ -179,16 +172,13 @@ function MyCamera() {
                   ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
                   : (setFlash(Camera.Constants.FlashMode.off), setFlashIconColor("white"), console.log(flash))
               }} size={40}></Icon>
-              {/* <Button onPress={savePicture}></Button> */}
             </View>
             <View style={styles.buttonContainer}>
             <BottomSheet style={styles.bottomSheet}
           visible={visible}
-          //setting the visibility state of the bottom shee
           onBackButtonPress={toggleBottomNavigationView}
-          //Toggling the visibility state on the click of the back botton
           onBackdropPress={toggleBottomNavigationView}
-          //Toggling the visibility state on the clicking out side of the sheet
+          
         ><Gallery/></BottomSheet>
               <Icon icon={"controller-stop"} onPress={toggleBottomNavigationView}size={60}></Icon>
               <Icon icon={"circle"} onPress={takePicture} size={80}></Icon>

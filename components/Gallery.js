@@ -64,7 +64,7 @@ function PhotoPicker() {
             id: updatedPhoto['id']
         });
     }
-    return updatedPhotos;  // Reverse to get the latest photos first
+    return updatedPhotos;
   }
   const handleOutsidePress = () => {
         setImage(null);
@@ -113,9 +113,6 @@ const styles = StyleSheet.create({
   outsideImage: {
     flex:1,
     backgroundColor: 'transparent',
-
-    // backgroundColor: "transparent",
-    // zIndex:1,
   }
 
 });

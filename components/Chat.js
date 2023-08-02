@@ -30,7 +30,6 @@ function Chat() {
     }
  
     useEffect(() => {
-        // Fetch old messages once when the component mounts
         if (!oldMessagesFetched && currentCoversationId && token) {
           const fetchOldMessages = async () => {
             try {
@@ -40,7 +39,6 @@ function Chat() {
             } catch (error) {
               console.error("Error fetching old messages:", error);
             } finally {
-              // Mark old messages as fetched
               setOldMessagesFetched(true);
             }
           };
@@ -84,7 +82,6 @@ function Chat() {
     
         initializeChat();
     
-        // Cleanup function
         return () => {
             if (client) {
                 client.disconnect(() => {
@@ -97,7 +94,6 @@ function Chat() {
   
     const handleSubmit = (event) => {
         event.preventDefault();
-        //receiverId in asyncStorage
         client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': message}));
         setMessage("");
         textInputRef.current.clear();
@@ -143,7 +139,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     sendMessageContainer: {
-        // flex: 1,
         flexDirection: "row",
         justifyContent: "space-around",
         width: "100%",
@@ -159,14 +154,10 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     sendMessageButton: {
-        // width: "20%",
         alignSelf: "center",
-        // borderWidth: 1,
         borderColor: "black",
         transform: [{ rotate: '-25deg' }]
     },
 });
 
 export default Chat;
-
-// Connection closed to http://10.16.6.20:8000/ws

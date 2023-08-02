@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Image, Dimensions } from 'react-native';
 import MovingImage from './MovingImage';
-const maxHeight = Dimensions.get('window').height;
-const maxWidth = Dimensions.get('window').width;
 
 const Barbie = () => {
   const fadeAnimation = useRef(new Animated.Value(0)).current;
@@ -17,16 +15,15 @@ const Barbie = () => {
     Animated.sequence([
       Animated.timing(fadeAnimation, {
         toValue: 1,
-        duration: 1000, // Duration for the fade in (in milliseconds)
+        duration: 1000,
         useNativeDriver: true,
       }),
       Animated.timing(fadeAnimation, {
         toValue: 0.8,
-        duration: 1000, // Duration for the fade out (in milliseconds)
+        duration: 1000,
         useNativeDriver: true,
       }),
     ]).start(() => {
-      // Restart the animation when it completes
       startFadingAnimation();
     });
   };

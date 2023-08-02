@@ -23,31 +23,26 @@ function RegisterPage({ state, setState}) {
       return;
     }
 
-    // Check password length
     if (password.length < 8) {
       Alert.alert('Password should be at least 8 characters');
       return;
     }
 
-    // Check password for uppercase letter
     if (!/[A-Z]/.test(password)) {
       Alert.alert('Password should contain at least one uppercase letter');
       return;
     }
 
-    // Check password for lowercase letter
     if (!/[a-z]/.test(password)) {
       Alert.alert('Password should contain at least one lowercase letter');
       return;
     }
 
-    // Check password for number
     if (!/\d/.test(password)) {
       Alert.alert('Password should contain at least one number');
       return;
     }
 
-    // Check password for special character
     if (!/[^A-Za-z0-9]/.test(password)) {
       Alert.alert('Password should contain at least one special character');
       return;
@@ -61,14 +56,12 @@ function RegisterPage({ state, setState}) {
     }).then((response) => {
       if (response.status === 200) {
         AsyncStorage.setItem('token', response.data);
-        console.log(`\nresponse data: ${response.data}`);
-        // console.log(`\nresponse headers: ${response.headers}`);
-        console.log('Login successful');
+        console.log('Registration successful');
         setState(!state);
       }
       else {
         console.log(`\nresponse: ${JSON.stringify(response.status)}`);
-        Alert.alert('Login failed');
+        Alert.alert('Registration failed');
       }
     }).catch((error) => {
         console.error('Error:', error);
