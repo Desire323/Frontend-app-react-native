@@ -7,12 +7,14 @@ import { getConversationId } from './api/chat_api';
 
 function ChatsList() {
   const navigation = useNavigation();
-  const hardcodedIdsArray = [5, 6, 7, 8, 9, 10, 11];
+  const [token, setToken] = useState(null);
+  const hardcodedIdsArray = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [selfId, setSelfId] = useState(null);
 
   useEffect(() => {
     async function getUserId() {
         const token = await AsyncStorage.getItem('token');
+        setToken(token);
         const decodedToken = jwtDecode(token);
         const tokenUserId = decodedToken.id;
         console.log("Token User Id: " + tokenUserId)
@@ -25,7 +27,7 @@ function ChatsList() {
     try {
         console.log("Self ID: " + selfId);
         console.log("Receiver ID: " + receiverId);
-      const conversationId = await getConversationId(selfId, receiverId);
+      const conversationId = await getConversationId(token, selfId, receiverId);
       console.log('Conversation ID:', conversationId);
       await AsyncStorage.setItem('conversationId', conversationId);
       await AsyncStorage.setItem('receiverId', JSON.stringify(receiverId));

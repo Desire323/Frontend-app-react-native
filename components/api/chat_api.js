@@ -4,10 +4,9 @@ import ApiManager from './ApiManager';
 const getConversationId = async (token, senderId, receiverId) => {
   try {
     const response = await ApiManager.get(`/chat-utils/${receiverId}`, {
-      baseURL: 'http://10.16.6.20:8080',
-      headers: { Authorization: `Bearer ${token}`,'x-auth-user-id': `${senderId}`},
+      headers: { 'Authorization': `Bearer ${token}`,'x-auth-user-id': `${senderId}`},
     });
-    // console.error('Response:', JSON.stringify(response));
+    console.log('Response:', JSON.stringify(response));
     const conversationId = response.data;
     console.log('Conversation ID:', conversationId);
     return conversationId;
@@ -16,16 +15,17 @@ const getConversationId = async (token, senderId, receiverId) => {
   }
 };
 
-const getMessages = async (conversationId) => {
+const getMessages = async (token, conversationId) => {
   try {
     console.log(`\n\n\n/chat-utils/messages/${conversationId}\n\n\n`)
-    const response = await ApiManager.get(`/chat-utils/messages/${conversationId}`, { baseURL: 'http://10.16.6.20:8080'});
+    const response = await ApiManager.get(`/chat-utils/messages/${conversationId}`, { 
+      headers: {'Authorization': `Bearer ${token}`}
+    });
     const messages = response.data;
-    console.log('Response:', response.data);
 
     return messages;
   } catch (error) {
-    console.error('Error getting chat messages:', error);
+    console.log('Error getting chat messages:', error);
   }
 };
 
