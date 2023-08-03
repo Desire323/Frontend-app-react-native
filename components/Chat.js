@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 import Icon from './Icon';
 import * as encoding from 'text-encoding';
 import { getMessages } from './api/chat_api';
+import TimestampToDateTime from './dateTime/TimestampToDateTime';
 
 
 function Chat() {
@@ -18,7 +19,11 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [oldMessagesFetched, setOldMessagesFetched] = useState(false);
     const [currentCoversationId, setCurrentConversationId] = useState(null);
+    const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
+    const [chatWithName, setChatWithName] = useState(null);
+
     const textInputRef = useRef();
+    
 
     async function getUserId() {
         const token = await AsyncStorage.getItem('token');
@@ -42,7 +47,7 @@ function Chat() {
               setOldMessagesFetched(true);
             }
           };
-    
+          
           fetchOldMessages();
         }
       }, [oldMessagesFetched, currentCoversationId, token]);
@@ -53,6 +58,8 @@ function Chat() {
             const url = 'http://10.16.6.20:8000/ws';
             const conversationId = await AsyncStorage.getItem('conversationId');
             const receiverId = await AsyncStorage.getItem('receiverId');
+            const chatWithName = await AsyncStorage.getItem('chatWithName');
+            setChatWithName(chatWithName);
             console.log("Conversation ID IN PRIVATE CHATS: " + conversationId);
             setCurrentConversationId(conversationId);
             setReceiverId(receiverId);
@@ -91,6 +98,7 @@ function Chat() {
         };
     }, []);
     
+    useEffect(() => { setTimeout(() => { setSelectedMessageIndex(null) }, 4000); }, [selectedMessageIndex]);
   
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -102,10 +110,28 @@ function Chat() {
 
   return (
     <View  style={styles.container}>
+      <Text style={styles.chatWith}>{chatWithName}</Text>
         <ScrollView style={styles.messagesList}>
-            {messages && messages.map((message, index) => (
-                <Text style={StyleSheet.compose(styles.message, message.senderId === senderId ? { alignSelf:"flex-end"} : { alignSelf:"flex-start"} )} key={index}>{message.message}</Text>
-            ))}
+        {messages && messages.map((message, index) => (
+    <View key={index}>
+        <Text 
+            onPress={() => setSelectedMessageIndex(index)}
+            style={StyleSheet.compose(
+                styles.message, 
+                message.senderId === senderId ? { alignSelf:"flex-end"} : { alignSelf:"flex-start"} 
+                )}
+        >
+            {message.message}
+        </Text>
+        {selectedMessageIndex === index && <TimestampToDateTime style={
+          StyleSheet.compose(
+                styles.date, 
+                message.senderId === senderId ? { alignSelf:"flex-end"} : { alignSelf:"flex-start"} 
+            )}
+              timestamp={message.timestamp} />}
+    </View>
+))}
+
         </ScrollView>
         <View>
           <View style={styles.sendMessageContainer}>
@@ -137,6 +163,14 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         padding: 10,
         marginVertical: 10,
+    },
+    chatWith: {
+      borderBottomWidth: 1,
+      width: "100%",
+      alignSelf: "center",
+      textAlign: "center",
+      marginTop: 25,
+      fontFamily: 'press-start',
     },
     sendMessageContainer: {
         flexDirection: "row",
