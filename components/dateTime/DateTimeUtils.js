@@ -1,9 +1,9 @@
-function isToday(dateString) {
-    if (!dateString) {
+function isToday(timestamp) {
+    if (!timestamp) {
       return false;
     }
 
-    const givenDate = new Date(parseInt(dateString, 10))
+    const givenDate = new Date(timestamp)
   
     const currentDate = new Date();
     console.log('\n\n\ngivenDate: ', givenDate);
