@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {auth_login} from '../api/auth_api';
 import styles from './authStyles';
+import { extractIdFromToken } from './authUtils';
 
 function LoginPage({ state, setState }) {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ function LoginPage({ state, setState }) {
         AsyncStorage.setItem('firstname', response.data.firstname);
         AsyncStorage.setItem('lastname', response.data.lastname);
         AsyncStorage.setItem('email', email);
+        AsyncStorage.setItem('selfId', JSON.stringify(extractIdFromToken(response.data.jwt)));
 
         try{
         navigation.navigate('Fortune');
