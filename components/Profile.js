@@ -1,29 +1,42 @@
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View, Image, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import TabBar from './TabBar';
+import { getFriendsCount } from './api/persons_api';
 
 function Profile() {
 
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
+    const [friendsCount, setFriendsCount] = useState() 
     
     useEffect(() => {
-        const getName = async () => {
+        const getProfileInfo = async () => {
+            const token = await AsyncStorage.getItem('token');
+            const selfId = await AsyncStorage.getItem('selfId');
+            console.log("Self ID: " + selfId);
             setFirstname(await AsyncStorage.getItem('firstname'));
             setLastname(await AsyncStorage.getItem('lastname'));
+            const friendsCount = await getFriendsCount(selfId, token)
+            setFriendsCount(friendsCount);
         };
-        getName();
+        getProfileInfo();
     }, []);
 
     return (
         <View style={styles.container}>
-        <Image
-          source={require('./../assets/images/profile-default.png')}
-            style={styles.profile}
-        />
-        <Text style={styles.name}> {firstname} {lastname}</Text>
-        <TabBar/>
+            <Image
+              source={require('./../assets/images/profile-default.png')}
+                style={styles.profile}
+            />
+            <Text style={styles.name}> {firstname} {lastname}</Text>
+            <TouchableOpacity onPress={console.log("Friends count: " + JSON.stringify(friendsCount))}>
+                <View style={styles.friendsCountContainer}>
+               {friendsCount !== null && <Text style={styles.text}>{friendsCount}</Text>}
+                <Text style={styles.text}>Friends</Text>
+                </View>
+            </TouchableOpacity>
+            <TabBar/>
         </View>
     )
 }
@@ -50,5 +63,15 @@ const styles = StyleSheet.create({
         fontFamily: 'press-start',
         textAlign: 'center',
         margin: 20,
+    },
+    friendsCountContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    text:{
+        fontSize: 16,
+        fontFamily: 'press-start',
+        textAlign: 'center',
+        margin: 5,
     },
 });
