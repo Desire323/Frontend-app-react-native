@@ -1,10 +1,10 @@
 import ApiManager from './ApiManager';
 
 
-const getConversationId = async (token, senderId, receiverId) => {
+const getConversationId = async (token, receiverId) => {
   try {
     const response = await ApiManager.get(`/chat-utils/${receiverId}`, {
-      headers: { 'Authorization': `Bearer ${token}`,'x-auth-user-id': `${senderId}`},
+      headers: { 'Authorization': `Bearer ${token}`},
     });
     console.log('Response:', JSON.stringify(response));
     const conversationId = response.data;
