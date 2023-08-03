@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, View, TextInput, ScrollView, Text } from 'react-native';
+import { Platform, TouchableOpacity, StyleSheet, View, TextInput, ScrollView, Text } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SockJS from 'sockjs-client';
@@ -21,6 +21,7 @@ function Chat() {
     const [currentCoversationId, setCurrentConversationId] = useState(null);
     const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
     const [chatWithName, setChatWithName] = useState(null);
+    
 
     const textInputRef = useRef();
     const scrollViewRef = useRef();
@@ -79,10 +80,10 @@ function Chat() {
         };
     }, []);
     
-    
+
     useEffect(() => { setTimeout(() => { 
-      setSelectedMessageIndex(null) }, 4000); 
-    }, [selectedMessageIndex]);
+        setSelectedMessageIndex(null) }, 4000); 
+      }, [selectedMessageIndex]);
 
     useEffect(() => {
       setTimeout(() => {
@@ -107,7 +108,15 @@ function Chat() {
             {messages &&
               messages.map((message, index) => (
                 <View key={index}>
-                  <View
+                  {selectedMessageIndex === index && <TimestampToDateTime style={
+                    StyleSheet.compose(
+                        styles.timestamp, 
+                        message.senderId === senderId ? 
+                            { alignSelf:"flex-end", paddingRight: 20} : 
+                            { alignSelf:"flex-start", marginLeft: 20} 
+                    )}
+                    timestamp={message.timestamp} />}
+                  <TouchableOpacity onPress={() => setSelectedMessageIndex(index)}
                     style={StyleSheet.compose(
                       styles.messageContainer,
                       message.senderId === senderId
@@ -116,13 +125,14 @@ function Chat() {
                     )}
                   >
                     <Text style={styles.messageText}>{message.message}</Text>
-                  </View>
-                  {selectedMessageIndex === index && (
+                  </TouchableOpacity>
+                  
+                  {/* {selectedMessageIndex === index && (
                     <TimestampToDateTime
                       style={styles.timestamp}
                       timestamp={message.timestamp}
                     />
-                  )}
+                  )} */}
                 </View>
               ))}
           </ScrollView>
@@ -187,6 +197,7 @@ function Chat() {
         borderRadius: 15,
         maxWidth: "80%",
         flexWrap: "wrap",
+        wordBreak: "break-word",
         padding: 10,
         marginVertical: 10,
       },
@@ -201,7 +212,9 @@ function Chat() {
       },
 
       messageText: {
-        fontSize: 16,
+        borderRadius: 15,
+        maxWidth: "80%",
+        flexWrap: "wrap",
       },
       timestamp: {
         fontSize: 12,
