@@ -58,4 +58,16 @@ const getFriends = async (id, token) => {
     }
 }
 
-export { getPerson, getAllPersons, createPerson, makeFriends, getFriends };
+const getFriendsCount = async (token) => {
+    try {
+        const response = await ApiManager.get(`/persons/self/friends-count`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+        return response.data ? response.data : response;
+    } catch (error) {
+        return error.response && error.response.data ? error.response.data : error;
+    }
+}
+
+
+export { getPerson, getAllPersons, createPerson, makeFriends, getFriends, getFriendsCount };

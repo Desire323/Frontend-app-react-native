@@ -1,4 +1,4 @@
-import { StyleSheet, View, TextInput, ScrollView, Text } from 'react-native';
+import { Platform, StyleSheet, View, TextInput, ScrollView, Text } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SockJS from 'sockjs-client';
@@ -98,90 +98,137 @@ function Chat() {
     };
 
 
-  return (
-    <View  style={styles.container}>
-      <Text style={styles.chatWith}>{chatWithName}</Text>
-        <ScrollView ref={scrollViewRef} style={styles.messagesList}>
-        {messages && messages.map((message, index) => (
-    <View key={index}>
-        <Text 
-            onPress={() => setSelectedMessageIndex(index)}
-            style={StyleSheet.compose(
-                styles.message, 
-                message.senderId === senderId ? { alignSelf:"flex-end"} : { alignSelf:"flex-start"} 
-                )}
-        >
-            {message.message}
-        </Text>
-        {selectedMessageIndex === index && <TimestampToDateTime style={
-          StyleSheet.compose(
-                styles.date, 
-                message.senderId === senderId ? { alignSelf:"flex-end"} : { alignSelf:"flex-start"} 
-            )}
-              timestamp={message.timestamp} />}
-    </View>
-))}
-
-        </ScrollView>
-        <View>
-          <View style={styles.sendMessageContainer}>
+    return (
+        <View style={Platform.OS === 'ios' ? styles.containerIos : styles.container}>
+          <View style={styles.chatWith}>
+            <Text style={styles.chatWithName}>{chatWithName}</Text>
+         </View>
+          <ScrollView ref={scrollViewRef} style={styles.messagesList}>
+            {messages &&
+              messages.map((message, index) => (
+                <View key={index}>
+                  <View
+                    style={StyleSheet.compose(
+                      styles.messageContainer,
+                      message.senderId === senderId
+                        ? styles.sentMessageContainer
+                        : styles.receivedMessageContainer
+                    )}
+                  >
+                    <Text style={styles.messageText}>{message.message}</Text>
+                  </View>
+                  {selectedMessageIndex === index && (
+                    <TimestampToDateTime
+                      style={styles.timestamp}
+                      timestamp={message.timestamp}
+                    />
+                  )}
+                </View>
+              ))}
+          </ScrollView>
+          <View style={styles.inputContainer}>
             <TextInput
-                ref={textInputRef}
-                style={styles.messageInput}
-                multiline={true}
-                scrollEnabled={true}
-                onChangeText={text => setMessage(text)}
-                placeholder="Message"
+              ref={textInputRef}
+              style={styles.messageInput}
+              multiline={true}
+              scrollEnabled={true}
+              onChangeText={(text) => setMessage(text)}
+              placeholder="Message"
             />
-            <Icon style={styles.sendMessageButton} icon={"send"} color={"black"} size={35} onPress={handleSubmit}/>
-            </View>
+            <Icon
+              style={styles.sendMessageButton}
+              icon={"send"}
+              color={"black"}
+              size={35}
+              onPress={handleSubmit}
+            />
+          </View>
         </View>
-    </View>
-);
-}
-
-const styles = StyleSheet.create({
-    container: {
+      );
+    }
+    
+    const styles = StyleSheet.create({
+      container: {
         flex: 1,
-        justifyContent: "flex-end",
         margin: 16,
-    },
-    message: {
+        justifyContent: "flex-end",
+      },
+      containerIos: {
+        flex: 1,
+        margin: 16,
+        marginTop: 35,
+        justifyContent: "flex-end",
+      },
+      header: {
+        backgroundColor: "#007AFF", // Blue color for the header background
+        paddingVertical: 10,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      chatWith: {
+        borderBottomWidth: 1,
+        width: "100%",
+        alignSelf: "center",
+        textAlign: "center",
+        marginTop: 25,
+        fontFamily: 'press-start',
+        paddingBottom: 10,
+      },
+      chatWithName: {
+        fontFamily: 'press-start',
+        textAlign: "center",
+        fontSize: 18,
+        lineHeight: 30,
+      },
+      messagesList: {
+        marginTop: 16,
+      },
+      messageContainer: {
         borderRadius: 15,
-        borderWidth: 1,
         maxWidth: "80%",
         flexWrap: "wrap",
         padding: 10,
         marginVertical: 10,
-    },
-    chatWith: {
-      borderBottomWidth: 1,
-      width: "100%",
-      alignSelf: "center",
-      textAlign: "center",
-      marginTop: 25,
-      fontFamily: 'press-start',
-    },
-    sendMessageContainer: {
+      },
+      sentMessageContainer: {
+        alignSelf: "flex-end",
+        backgroundColor: "#E0E0E0", // Light green for sent messages
+      },
+      receivedMessageContainer: {
+        alignSelf: "flex-start",
+        borderColor: "#E0E0E0",
+        borderWidth: 1.5,
+      },
+
+      messageText: {
+        fontSize: 16,
+      },
+      timestamp: {
+        fontSize: 12,
+        alignSelf: "center",
+      },
+      inputContainer: {
         flexDirection: "row",
         justifyContent: "space-around",
         width: "100%",
         height: 50,
-    },
-    messageInput: {
-      width: "80%",
-      borderRadius: 10,
-      paddingLeft:10,
-      borderWidth: 1,
-    },
-    messagesList: {
-        marginTop: 16,
-    },
-    sendMessageButton: {
+        alignItems: "center",
+      },
+      messageInput: {
+        flex: 1,
+        // width: "80%",
+        borderRadius: 10,
+        padding: 10,
+        borderWidth: 1,
+        fontSize: 16,
+      },
+      sendMessageButton: {
+        marginLeft: 10,
+        marginBottom: 10,
         alignSelf: "center",
         borderColor: "black",
-        transform: [{ rotate: '-25deg' }]
-    },
-});
-
-export default Chat;
+        transform: [{ rotate: "-25deg" }],
+      },
+    });
+    
+    export default Chat;
