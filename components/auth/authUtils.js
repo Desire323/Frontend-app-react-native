@@ -24,4 +24,10 @@ const checkTokenExpiration = async () => {
   }
 };
 
-export { checkTokenExpiration };
+const extractIdFromToken = (token) => {
+  const decodedToken = jwtDecode(token);
+  const tokenUserId = decodedToken.id;
+  return tokenUserId;
+};
+
+export { checkTokenExpiration, extractIdFromToken };
