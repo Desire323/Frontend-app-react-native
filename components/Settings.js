@@ -13,6 +13,12 @@ function Settings() {
             await AsyncStorage.setItem('firstname', 'World');
             await AsyncStorage.removeItem('lastname');
             await AsyncStorage.removeItem('email');
+            await AsyncStorage.removeItem('lastReceivedDate');
+            await AsyncStorage.removeItem('lastFortune');
+            await AsyncStorage.removeItem('conversationId');
+            await AsyncStorage.removeItem('receiverId');
+            await AsyncStorage.removeItem('chatWithName');
+            
             navigation.navigate('Welcome');
         } catch (error) {
             console.log('Error occured while logging out');
