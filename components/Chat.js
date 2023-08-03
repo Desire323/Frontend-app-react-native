@@ -24,24 +24,6 @@ function Chat() {
 
     const textInputRef = useRef();
     const scrollViewRef = useRef();
- 
-    useEffect(() => {
-        if (!oldMessagesFetched && currentCoversationId && token) {
-          const fetchOldMessages = async () => {
-            try {
-              const oldMessages = await getMessages(token, currentCoversationId);
-              console.log("OLD MESSAGES: ", oldMessages);
-              setMessages(oldMessages.reverse());
-            } catch (error) {
-              console.error("Error fetching old messages:", error);
-            } finally {
-              setOldMessagesFetched(true);
-            }
-          };
-          
-          fetchOldMessages();
-        }
-      }, [oldMessagesFetched, currentCoversationId, token]);
 
       useEffect(() => {
         const initializeChat = async () => {
@@ -67,6 +49,7 @@ function Chat() {
                 const oldMessages = await getMessages(token, conversationId);
                 console.log("OLD MESSAGES: " + oldMessages);
                 setMessages(oldMessages.reverse());
+                setOldMessagesFetched(true);
             } catch (error) {
                 console.log("Error fetching old messages:", error);
             }
@@ -106,17 +89,7 @@ function Chat() {
           scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
   }, [messages]);
-  
-  useEffect(() => {
-      if (oldMessagesFetched) {
-          setTimeout(() => {
-              scrollViewRef.current?.scrollToEnd({ animated: true });
-          }, 100);
-      }
-  }, [oldMessagesFetched]);
-  
-  
-  
+   
     const handleSubmit = (event) => {
         event.preventDefault();
         client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': message}));
