@@ -102,14 +102,19 @@ function Chat() {
     }, [selectedMessageIndex]);
 
     useEffect(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
-    }, [messages]);
-  
-    useEffect(() => {
-      if (oldMessagesFetched) {
+      setTimeout(() => {
           scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+  }, [messages]);
+  
+  useEffect(() => {
+      if (oldMessagesFetched) {
+          setTimeout(() => {
+              scrollViewRef.current?.scrollToEnd({ animated: true });
+          }, 100);
       }
   }, [oldMessagesFetched]);
+  
   
   
     const handleSubmit = (event) => {
