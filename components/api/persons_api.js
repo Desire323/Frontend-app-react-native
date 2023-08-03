@@ -58,9 +58,9 @@ const getFriends = async (id, token) => {
     }
 }
 
-const getFriendsCount = async (token) => {
+const getFriendsCount = async (id, token) => {
     try {
-        const response = await ApiManager.get(`/persons/self/friends-count`, {
+        const response = await ApiManager.get(`/persons/${id}/friends-count`, {
             headers: { 'Authorization': `Bearer ${token}` },
         });
         return response.data ? response.data : response;
