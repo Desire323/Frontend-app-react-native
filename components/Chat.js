@@ -23,16 +23,7 @@ function Chat() {
     const [chatWithName, setChatWithName] = useState(null);
 
     const textInputRef = useRef();
-    
-
-    async function getUserId() {
-        const token = await AsyncStorage.getItem('token');
-        setToken(token)
-        const decodedToken = jwtDecode(token);
-        const tokenSenderId = decodedToken.id;
-        console.log("Token sender Id: " + tokenSenderId)
-        setSenderId(tokenSenderId);
-    }
+    const scrollViewRef = useRef();
  
     useEffect(() => {
         if (!oldMessagesFetched && currentCoversationId && token) {
@@ -52,13 +43,20 @@ function Chat() {
         }
       }, [oldMessagesFetched, currentCoversationId, token]);
 
-    useEffect(() => {
-        getUserId();
+      useEffect(() => {
         const initializeChat = async () => {
+            const token = await AsyncStorage.getItem('token');
+            const decodedToken = jwtDecode(token);
+            const tokenSenderId = decodedToken.id;
+            console.log("Token sender Id: " + tokenSenderId)
+            setSenderId(tokenSenderId);
+            setToken(token);
+            
             const url = 'http://10.16.6.20:8000/ws';
             const conversationId = await AsyncStorage.getItem('conversationId');
             const receiverId = await AsyncStorage.getItem('receiverId');
             const chatWithName = await AsyncStorage.getItem('chatWithName');
+            
             setChatWithName(chatWithName);
             console.log("Conversation ID IN PRIVATE CHATS: " + conversationId);
             setCurrentConversationId(conversationId);
@@ -66,29 +64,29 @@ function Chat() {
             console.log("Chat.js CURRENT Conversation ID IN PRIVATE CHATS: " + conversationId);
             
             try {
-              const oldMessages = await getMessages(token, conversationId);
-              console.log("OLD MESSAGES: " + oldMessages);
-              setMessages(oldMessages.reverse());
+                const oldMessages = await getMessages(token, conversationId);
+                console.log("OLD MESSAGES: " + oldMessages);
+                setMessages(oldMessages.reverse());
             } catch (error) {
-              console.error("Error fetching old messages:", error);
+                console.log("Error fetching old messages:", error);
             }
+            
             const stompClient = Stomp.over(() => new SockJS(url));
             console.log(`Chat.js url=${url} and stompClient = ${stompClient}`)
-          
+            
             stompClient.connect({}, (frame) => {
-              console.log('Connected: ' + frame);
-              stompClient.subscribe(`/topic/messages/${conversationId}`, (message) => {
-                const messageData = JSON.parse(message.body);
-                setMessages((prevMessages) => [...prevMessages, messageData]);
-              });
+                console.log('Connected: ' + frame);
+                stompClient.subscribe(`/topic/messages/${conversationId}`, (message) => {
+                    const messageData = JSON.parse(message.body);
+                    setMessages((prevMessages) => [...prevMessages, messageData]);
+                });
             });
-          
+            
             setClient(stompClient);
-          };
-          
-    
+        };
+        
         initializeChat();
-    
+        
         return () => {
             if (client) {
                 client.disconnect(() => {
@@ -98,7 +96,21 @@ function Chat() {
         };
     }, []);
     
-    useEffect(() => { setTimeout(() => { setSelectedMessageIndex(null) }, 4000); }, [selectedMessageIndex]);
+    
+    useEffect(() => { setTimeout(() => { 
+      setSelectedMessageIndex(null) }, 4000); 
+    }, [selectedMessageIndex]);
+
+    useEffect(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, [messages]);
+  
+    useEffect(() => {
+      if (oldMessagesFetched) {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+      }
+  }, [oldMessagesFetched]);
+  
   
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -111,7 +123,7 @@ function Chat() {
   return (
     <View  style={styles.container}>
       <Text style={styles.chatWith}>{chatWithName}</Text>
-        <ScrollView style={styles.messagesList}>
+        <ScrollView ref={scrollViewRef} style={styles.messagesList}>
         {messages && messages.map((message, index) => (
     <View key={index}>
         <Text 
