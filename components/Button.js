@@ -2,10 +2,10 @@ import React from 'react';
 import { Text, StyleSheet, Pressable } from 'react-native';
 
 function Button(props) {
-  const { onPress, title = 'Save' } = props;
+  const { onPress, title = 'Save', style, textStyle } = props;
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+    <Pressable style={StyleSheet.compose(styles.button, style)} onPress={onPress}>
+      <Text style={StyleSheet.compose(styles.text, textStyle)}>{title}</Text>
     </Pressable>
   );
 }
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
   },
