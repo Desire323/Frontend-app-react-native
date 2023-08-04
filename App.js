@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Notifications from 'expo-notifications';
 
 import HelloWorldScreen from './components/HelloWorld';
 import MyCamera from './components/Camera';
@@ -15,11 +16,17 @@ import Settings from './components/Settings';
 import ChatsList from './components/ChatsList';
 import Chat from './components/Chat';
 import Friends from './components/Friends';
+import NotificationScreen from './components/notifications/Notifications';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
+
+  Notifications.addNotificationReceivedListener((notification) => {
+    alert('Notification received:', notification);
+    console.log("Notification received:", notification);
+  });
 
   const loadFont = async () => {
     await Font.loadAsync({
@@ -98,6 +105,11 @@ export default function App() {
         <Stack.Screen
           name="Friends"
           component={Friends}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NotificationScreen"
+          component={NotificationScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      
