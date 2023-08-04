@@ -2,6 +2,7 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
+import {registerForPushNotificationsAsync} from './notifications/NotificationsUtils';
 
 
 function Settings() {
@@ -28,9 +29,14 @@ function Settings() {
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Settings</Text>
-            <ScrollView >
-                
-                <Button title="Logout" onPress={handleLogout}/>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <Button style={styles.button} title="test" onPress={async () => {
+                    const token = await registerForPushNotificationsAsync(); 
+                    console.log("ExpoToken: " + token);
+                    console.log(JSON.stringify( token ))
+                }}/>
+                <Button style={styles.button} title="Notifications" onPress={() => navigation.navigate('NotificationScreen')}/>
+                <Button style={styles.logout} textStyle={styles.text} title="Logout" onPress={handleLogout}/>
                 
             </ScrollView>
         </View>
@@ -45,6 +51,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
     },
+    scrollView: {
+        alignItems: 'center',
+    },
     heading: {
         fontFamily: 'press-start',
         fontSize: 30,
@@ -53,5 +62,20 @@ const styles = StyleSheet.create({
         marginVertical: 40,
         borderBottomColor: 'black',
         borderBottomWidth: 5,
+    },
+    logout: {
+        backgroundColor: '#D2042D',
+        borderColor: '#D22B2B',
+        borderWidth: 2,
+        width: 170,
+    },
+    button: {
+        width: 300,
+        marginVertical: 10,
+        borderRadius: 15,
+     },
+    text: {
+        fontFamily: 'press-start',
+        color: '#FFC0CB',
     },
 });
