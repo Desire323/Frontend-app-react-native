@@ -50,7 +50,7 @@ async function registerForPushNotificationsAsync() {
     }
      token = (
       await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig.projectId,
+        projectId: process.env.EXPO_PROJECT_ID,
       }))
     console.log(token);
   } else {

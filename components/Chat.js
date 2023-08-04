@@ -35,7 +35,7 @@ function Chat() {
             setSenderId(tokenSenderId);
             setToken(token);
             
-            const url = 'http://10.16.6.20:8000/ws';
+            const url = `${process.env.API_GATEWAY_URL}/ws`;
             const conversationId = await AsyncStorage.getItem('conversationId');
             const receiverId = await AsyncStorage.getItem('receiverId');
             const chatWithName = await AsyncStorage.getItem('chatWithName');

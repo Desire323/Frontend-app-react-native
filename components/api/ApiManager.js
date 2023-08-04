@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const ApiManager = axios.create({
-    baseURL: 'http://10.16.6.20:8000',
+  baseURL: `${process.env.API_GATEWAY_URL}`,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
