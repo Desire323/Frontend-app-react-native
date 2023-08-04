@@ -20,10 +20,19 @@
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/favicon.png",
+          "color": "#ffffff",
+          "sounds": [
+          ]
+        }
       ]
     ],    
-    "name": "native2",
-    "slug": "native2",
+    "name": "Desire323",
+    "slug": "Desire323",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -40,6 +49,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.desire323",
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
