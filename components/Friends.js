@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import TabBar from './TabBar';
-import { getConversationId } from './api/chat_api';
-import { getAllPersons } from './api/persons_api';
+import { getAllPersons, getFriends, makeFriends } from './api/persons_api';
+import CustomAlert from './CustomAlert';
+import PersonCard from './PersonCard';
 
 function Friends() {
   const navigation = useNavigation();
   const [people, setPeople] = useState([]);
   const [token, setToken] = useState(null);
   const [selfId, setSelfId] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
 
   async function getPeople() {
     try {
@@ -41,39 +45,44 @@ function Friends() {
     getUserId();
   }, []);
 
-  const handlePress = async (personId, firstname, lastname) => {
+  const handlePress = async (personId) => {
     try {
       console.log('Self ID: ' + selfId);
       console.log('Receiver ID: ' + personId);
-      const conversationId = await getConversationId(token, personId);
-      console.log('Conversation ID:', conversationId);
-      await AsyncStorage.setItem('conversationId', conversationId);
-      await AsyncStorage.setItem('receiverId', JSON.stringify(personId));
-      await AsyncStorage.setItem('chatWithName', `${firstname} ${lastname}`);
-      if (conversationId) {
-        navigation.navigate('Chat');
+      const response = await makeFriends(selfId, personId, token);
+      if(response){
+        setAlertTitle(response);
+        setShowAlert(true);
+        return console.log(response);
       }
     } catch (error) {
-      console.error('Error getting conversation ID:', error);
+      console.error('Error making friends:', error);
     }
   };
-
+  
 
   return (
     <View style={styles.container}>
+       <CustomAlert
+      visible={showAlert}
+      title={alertTitle ? alertTitle : "Response"}
+      message={alertMessage ? alertMessage : ""}
+      onClose={() => setShowAlert(false)}
+    />
+
       <Text style={styles.heading}>Friends</Text>
-      <ScrollView>
+      <View style={styles.scrollViewContainer}>
+      <ScrollView
+          style={{maxHeight: '85%'}}>
         {people.map((person) => (
-          <TouchableOpacity
-            style={styles.nameContainer}
-            key={person.id}
-            onPress={() => handlePress(person.id, person.firstname, person.lastname)}
-          >
-            <Text style={styles.text}>{person.firstname} {person.lastname}</Text>
-          </TouchableOpacity>
+          <PersonCard
+            person={person}
+            handlePress={handlePress}
+          />
         ))}
       </ScrollView>
-      <TabBar />
+      </View>
+      <TabBar/>
     </View>
   );
 }
@@ -94,17 +103,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 5,
   },
-  nameContainer: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
-    margin: 5,
-  },
-  text: {
-    fontFamily: 'press-start',
-    fontSize: 20,
-    textAlign: 'center',
-    lineHeight: 55,
+  scrollViewContainer: {
+    height: '85%',
+    width: '100%',
   },
 });
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import TabBar from './TabBar';
-import { getConversationId } from './api/chat_api';
+import { getConversationId, getLastMessage } from './api/chat_api';
 import { getFriends } from './api/persons_api';
+import PersonCard from './PersonCard';
 
 function ChatsList() {
   const navigation = useNavigation();
@@ -19,8 +20,20 @@ function ChatsList() {
       setToken(token);
       setSelfId(selfId);
       const response = await getFriends(selfId, token);
-      
-      setPeople(response.filter((person) => person.id !== JSON.parse(selfId)));
+      if (response) {
+        setPeople(response.filter((person) => person.id !== JSON.parse(selfId)));
+      }
+
+      const updatedPeople = await Promise.all(response.map(async (person) => {
+        const conversationId = await getConversationId(token, person.id);
+
+        const lastMessage = await getLastMessage(token, conversationId);
+        return { ...person, lastMessage: lastMessage };
+      }));
+
+      setPeople(updatedPeople);
+      console.log("\n\n\nUpdated people: " + JSON.stringify(people))
+
     } catch (error) {
       console.error('Error getting people:', error);
     }
@@ -64,17 +77,20 @@ function ChatsList() {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>ChatsList</Text>
+      <View style={styles.scrollViewContainer}>
       <ScrollView>
         {people.map((person) => (
-          <TouchableOpacity
-            style={styles.nameContainer}
-            key={person.id}
-            onPress={() => handlePress(person.id, person.firstname, person.lastname)}
-          >
-            <Text style={styles.text}>{person.firstname} {person.lastname}</Text>
-          </TouchableOpacity>
+          <PersonCard 
+          key={person.id} 
+          person={person} 
+          handlePress={handlePress}
+          selfId={selfId}
+          token={token}
+          showMessage={true}
+        />
         ))}
       </ScrollView>
+      </View>
       <TabBar />
     </View>
   );
@@ -97,17 +113,39 @@ const styles = StyleSheet.create({
     borderBottomWidth: 5,
   },
   nameContainer: {
+    flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     margin: 5,
+    height: 125,
   },
-  text: {
+  name: {
     fontFamily: 'press-start',
-    fontSize: 20,
+    fontSize: 15,
     textAlign: 'center',
     lineHeight: 55,
+  },
+  lastMessage: {
+    fontFamily: 'press-start',
+    fontSize: 10,
+    lineHeight: 15,
+    width: 200,
+  },
+  profile: {
+    marginHorizontal: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    overflow: "hidden",
+    borderWidth: 3,
+    borderColor: "black",
+  },
+  scrollViewContainer: {
+    height: '85%',
+    width: '100%',
   },
 });
 
 export default ChatsList;
+
