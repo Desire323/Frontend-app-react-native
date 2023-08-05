@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Text, View, Button, Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import Constants from "expo-constants";
+import CustomAlert from './../CustomAlert';
 
 
 Notifications.setNotificationHandler({
@@ -45,17 +45,21 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      setAlertMessage('Failed to get push token for push notification!');
+      setShowAlert(true);
       return;
     }
+    
      token = (
       await Notifications.getExpoPushTokenAsync({
         projectId: process.env.EXPO_PROJECT_ID,
       }))
     console.log(token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    setAlertMessage('Must use physical device for Push Notifications');
+    setShowAlert(true);
   }
+  
 
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
@@ -72,6 +76,8 @@ async function registerForPushNotificationsAsync() {
 export default function NotificationScreen() {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -94,6 +100,12 @@ export default function NotificationScreen() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+      <CustomAlert
+        visible={showAlert}
+        title={"Error"}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification && notification.request.content.title} </Text>

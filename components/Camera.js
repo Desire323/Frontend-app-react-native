@@ -5,6 +5,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-btr';
 import Gallery from './Gallery'
+import CustomAlert from './CustomAlert';
 
 import Icon from './Icon';
 
@@ -22,6 +23,11 @@ function MyCamera() {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const [flashIconColor, setFlashIconColor] = useState("white")
   const [visible, setVisible] = useState(false)
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
 
   const cameraRef = useRef(camera);
 
@@ -108,17 +114,22 @@ function MyCamera() {
   };
 
   const savePicture = async () => {
-    if(photo) {
+    if (photo) {
       try {
         await MediaLibrary.createAssetAsync(photo);
-        alert("Picture saved!")
+        setAlertTitle('Success');
+        setAlertMessage('Picture saved!');
+        setShowAlert(true);
         setPhoto(null);
-
-      }catch(e) {
-        console.log(e)
+      } catch (e) {
+        setAlertTitle('Error');
+        setAlertMessage('Failed to save picture.');
+        setShowAlert(true);
+        console.log(e);
       }
     }
-  }
+  };
+  
 
   const retakePicture = async () => {
     if(photo) {
@@ -150,6 +161,12 @@ function MyCamera() {
   } else {
     return (
       <View style={styles.container}>
+          <CustomAlert
+          visible={showAlert}
+          title={alertTitle}
+          message={alertMessage}
+          onClose={() => setShowAlert(false)}
+        />
         {!photo ? (
           <Camera
             style={[styles.cameraPreview, { marginTop: imagePadding, marginBottom: imagePadding }]}
