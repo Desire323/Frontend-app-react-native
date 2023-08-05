@@ -6,7 +6,6 @@ const getConversationId = async (token, receiverId) => {
     const response = await ApiManager.get(`/chat-utils/${receiverId}`, {
       headers: { 'Authorization': `Bearer ${token}`},
     });
-    console.log('Response:', JSON.stringify(response));
     const conversationId = response.data;
     console.log('Conversation ID:', conversationId);
     return conversationId;
@@ -31,16 +30,16 @@ const getMessages = async (token, conversationId) => {
 
 const getLastMessage = async (token, conversationId) => {
   try {
-    const response = await ApiManager.get(`/chat-utils/messages/${conversationId}/last`, { 
+   const response = await ApiManager.get(`/chat-utils/messages/${conversationId}/last`, { 
       headers: {'Authorization': `Bearer ${token}`}
     });
-    const messages = response.data;
+    const lastMessage = response.data;
 
-    return messages[messages.length - 1];
+    return lastMessage;
   } catch (error) {
     console.log('Error getting last message:', error);
   }
-
 };
+
 
 export { getConversationId, getMessages, getLastMessage };
