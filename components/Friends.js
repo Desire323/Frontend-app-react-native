@@ -22,7 +22,8 @@ function Friends() {
       const selfId = await AsyncStorage.getItem('selfId');
       setToken(token);
       const response = await getAllPersons(token);
-      setPeople(response.filter((person) => person.id !== JSON.parse(selfId)));
+      const friends = await getFriends(JSON.parse(selfId), token);
+      setPeople(response.filter((person) => person.id !== JSON.parse(selfId) && !friends.some(friend => friend.id === person.id)));
     } catch (error) {
       console.error('Error getting people:', error);
     }
@@ -51,6 +52,7 @@ function Friends() {
       console.log('Receiver ID: ' + personId);
       const response = await makeFriends(selfId, personId, token);
       if(response){
+        setPeople(people.filter(person => person.id !== personId)); // Removing the person from the list
         setAlertTitle(response);
         setShowAlert(true);
         return console.log(response);
@@ -59,7 +61,6 @@ function Friends() {
       console.error('Error making friends:', error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
