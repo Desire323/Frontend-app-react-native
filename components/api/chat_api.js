@@ -29,4 +29,18 @@ const getMessages = async (token, conversationId) => {
   }
 };
 
-export { getConversationId, getMessages };
+const getLastMessage = async (token, conversationId) => {
+  try {
+    const response = await ApiManager.get(`/chat-utils/messages/${conversationId}/last`, { 
+      headers: {'Authorization': `Bearer ${token}`}
+    });
+    const messages = response.data;
+
+    return messages[messages.length - 1];
+  } catch (error) {
+    console.log('Error getting last message:', error);
+  }
+
+};
+
+export { getConversationId, getMessages, getLastMessage };
