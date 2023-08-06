@@ -17,6 +17,7 @@ import ChatsList from './components/ChatsList';
 import Chat from './components/Chat';
 import Friends from './components/Friends';
 import NotificationScreen from './components/notifications/Notifications';
+import FortuneMessage from './components/FortuneMessage';
 
 const Stack = createStackNavigator();
 
@@ -110,6 +111,11 @@ export default function App() {
         <Stack.Screen
           name="NotificationScreen"
           component={NotificationScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="FortuneMessage"
+          component={FortuneMessage}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>      

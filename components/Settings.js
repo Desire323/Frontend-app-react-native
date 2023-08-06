@@ -37,7 +37,7 @@ function Settings() {
                 }}/>
                 <Button style={styles.button} title="Notifications" onPress={() => navigation.navigate('NotificationScreen')}/>
                 <Button style={styles.logout} textStyle={styles.text} title="Logout" onPress={handleLogout}/>
-                
+                <Button title="FortuneMessage TEST" onPress={() => navigation.navigate("FortuneMessage")}/>
             </ScrollView>
         </View>
     )
