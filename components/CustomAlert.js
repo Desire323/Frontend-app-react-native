@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   modalMessage: {
     marginBottom: 15,
     textAlign: "center",
-    fontFamily: 'Roboto',
     fontSize: 15,
   }
 });
