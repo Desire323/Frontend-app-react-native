@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import { useNavigation } from '@react-navigation/native';
 import jwtDecode from 'jwt-decode';
 import Icon from './Icon';
 import * as encoding from 'text-encoding';
@@ -11,6 +12,7 @@ import TimestampToDateTime from './dateTime/TimestampToDateTime';
 
 
 function Chat() {
+    const navigation = useNavigation();
     const [client, setClient] = useState(null);
     const [token, setToken] = useState(null);
     const [senderId, setSenderId] = useState(null);
@@ -21,6 +23,8 @@ function Chat() {
     const [currentCoversationId, setCurrentConversationId] = useState(null);
     const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
     const [chatWithName, setChatWithName] = useState(null);
+    const [messageInputClicked, setMessageInputClicked] = useState(false);
+
     
 
     const textInputRef = useRef();
@@ -93,15 +97,20 @@ function Chat() {
    
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!message) 
+          return;
         client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': message}));
         setMessage("");
         textInputRef.current.clear();
     };
 
+    const handleMessageClick = () => {
+      setMessageInputClicked(!messageInputClicked);
+    }
 
     return (
       <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? "padding" : ""}
       style={Platform.OS === 'ios' ? styles.containerIos : styles.container}>
           <View style={styles.chatWith}>
             <Text style={styles.chatWithName}>{chatWithName}</Text>
@@ -114,8 +123,8 @@ function Chat() {
                     StyleSheet.compose(
                         styles.timestamp, 
                         message.senderId === senderId ? 
-                            { alignSelf:"flex-end", paddingRight: 20} : 
-                            { alignSelf:"flex-start", marginLeft: 20} 
+                            styles.yourMessage : 
+                            styles.otherMessage 
                     )}
                     timestamp={message.timestamp} />}
                   <TouchableOpacity onPress={() => setSelectedMessageIndex(index)}
@@ -133,19 +142,44 @@ function Chat() {
           </ScrollView>
           
           <View style={styles.inputContainer}>
+          {messageInputClicked ?
           <Icon
-              // style={styles.sendMessageButton}
-              icon={"share"}
+          style={styles.arrowButton}
+          icon={"chevron-right"}
+          color={"black"}
+          size={28}
+          onPress={handleMessageClick}
+          /> :  
+          <View style={styles.messageMenu}>
+            <Icon
+              style={styles.messageMenuButtons}
+              icon={"image"}
               color={"black"}
-              size={35}
+              size={28}
               onPress={handleSubmit}
             />
+            <Icon
+                style={styles.messageMenuButtons}
+                icon={"camera"}
+                color={"black"}
+                size={28}
+                onPress={() => navigation.navigate("Camera")}
+              />
+            <Icon
+                style={styles.messageMenuButtons}
+                icon={"share-variant"}
+                color={"black"}
+                size={28}
+                onPress={handleSubmit}
+              />
+            </View>}
             <TextInput
               ref={textInputRef}
               style={styles.messageInput}
               multiline={true}
               scrollEnabled={true}
               onChangeText={(text) => setMessage(text)}
+              onPressIn={handleMessageClick}
               placeholder="Message"
             />
             <Icon
@@ -244,6 +278,24 @@ function Chat() {
         alignSelf: "center",
         borderColor: "black",
         transform: [{ rotate: "-25deg" }],
+      },
+      messageMenu: {
+        flexDirection: "row",
+        width: "35%",
+      },
+      messageMenuButtons: {
+        marginHorizontal: 5,
+      },
+      arrowButton: {
+        marginRight: 10,
+      },
+      yourMessage: {
+        alignSelf:"flex-end",
+        paddingRight: 20,
+      },
+      otherMessage: {
+        alignSelf:"flex-start",
+        paddingLeft: 20
       },
     });
     
