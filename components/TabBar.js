@@ -3,11 +3,11 @@ import Icon from './Icon';
 import { useNavigation } from '@react-navigation/native';
 
 
-function TabBar() {
+function TabBar({style}) {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>  
+        <View style={StyleSheet.compose(styles.container, style)}>  
             <Icon icon={"cat"} color={"black"} onPress={() => navigation.navigate("Profile")}/>
 
             <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chats")}/>
