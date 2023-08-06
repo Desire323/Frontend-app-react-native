@@ -1,4 +1,4 @@
-import { Platform, TouchableOpacity, StyleSheet, View, TextInput, ScrollView, Text } from 'react-native';
+import { Platform, TouchableOpacity, StyleSheet, View, TextInput, ScrollView, KeyboardAvoidingView, Text } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SockJS from 'sockjs-client';
@@ -100,7 +100,9 @@ function Chat() {
 
 
     return (
-        <View style={Platform.OS === 'ios' ? styles.containerIos : styles.container}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? "padding" : "height"}
+      style={Platform.OS === 'ios' ? styles.containerIos : styles.container}>
           <View style={styles.chatWith}>
             <Text style={styles.chatWithName}>{chatWithName}</Text>
          </View>
@@ -126,17 +128,18 @@ function Chat() {
                   >
                     <Text style={styles.messageText}>{message.message}</Text>
                   </TouchableOpacity>
-                  
-                  {/* {selectedMessageIndex === index && (
-                    <TimestampToDateTime
-                      style={styles.timestamp}
-                      timestamp={message.timestamp}
-                    />
-                  )} */}
                 </View>
               ))}
           </ScrollView>
+          
           <View style={styles.inputContainer}>
+          <Icon
+              // style={styles.sendMessageButton}
+              icon={"share"}
+              color={"black"}
+              size={35}
+              onPress={handleSubmit}
+            />
             <TextInput
               ref={textInputRef}
               style={styles.messageInput}
@@ -153,7 +156,7 @@ function Chat() {
               onPress={handleSubmit}
             />
           </View>
-        </View>
+        </KeyboardAvoidingView> 
       );
     }
     
