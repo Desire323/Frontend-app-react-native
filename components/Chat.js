@@ -9,6 +9,7 @@ import Icon from './Icon';
 import * as encoding from 'text-encoding';
 import { getMessages } from './api/chat_api';
 import TimestampToDateTime from './dateTime/TimestampToDateTime';
+import FortuneMessage from './FortuneMessage';
 
 
 function Chat() {
@@ -24,6 +25,7 @@ function Chat() {
     const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
     const [chatWithName, setChatWithName] = useState(null);
     const [messageInputClicked, setMessageInputClicked] = useState(false);
+    const [scrollPadding, setScrollPadding] = useState(50);
 
     
 
@@ -58,7 +60,7 @@ function Chat() {
             } catch (error) {
                 console.log("Error fetching old messages:", error);
             }
-            
+              
             const stompClient = Stomp.over(() => new SockJS(url));
             console.log(`Chat.js url=${url} and stompClient = ${stompClient}`)
             
@@ -73,8 +75,22 @@ function Chat() {
             setClient(stompClient);
         };
         
-        initializeChat();
+        fetchShareFortune = async () => {
+        const shareFortune = await AsyncStorage.getItem('shareFortune');
         
+        try{ 
+          if (shareFortune) {
+            client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': shareFortune, 'messageType': 'fortune'}));
+            AsyncStorage.removeItem('shareFortune');
+          }
+        }catch (error) {
+            console.log("No fortune for sharing: ", error);
+          }
+        }
+
+        initializeChat();
+        fetchShareFortune();
+
         return () => {
             if (client) {
                 client.disconnect(() => {
@@ -85,21 +101,22 @@ function Chat() {
     }, []);
     
 
-    useEffect(() => { setTimeout(() => { 
+    useEffect(() => { setTimeout(() => {
         setSelectedMessageIndex(null) }, 4000); 
       }, [selectedMessageIndex]);
 
-    useEffect(() => {
-      setTimeout(() => {
-          scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-  }, [messages]);
+      useEffect(() => {
+        setTimeout(() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }, [messages]);
+      
    
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!message) 
           return;
-        client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': message}));
+        client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': message, 'messageType': 'text'}));
         setMessage("");
         textInputRef.current.clear();
     };
@@ -115,30 +132,41 @@ function Chat() {
           <View style={styles.chatWith}>
             <Text style={styles.chatWithName}>{chatWithName}</Text>
          </View>
-          <ScrollView ref={scrollViewRef} style={styles.messagesList}>
-            {messages &&
-              messages.map((message, index) => (
-                <View key={index}>
-                  {selectedMessageIndex === index && <TimestampToDateTime style={
-                    StyleSheet.compose(
-                        styles.timestamp, 
-                        message.senderId === senderId ? 
-                            styles.yourMessage : 
-                            styles.otherMessage 
-                    )}
-                    timestamp={message.timestamp} />}
-                  <TouchableOpacity onPress={() => setSelectedMessageIndex(index)}
+         <ScrollView
+            ref={scrollViewRef}
+            onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+            style={styles.messagesList}
+            contentContainerStyle={{paddingBottom: 50}}
+        >
+
+
+{messages &&
+    messages.map((message, index) => (
+        <View key={index}>
+            {selectedMessageIndex === index && <TimestampToDateTime style={
+                  StyleSheet.compose(
+                      styles.timestamp, 
+                      message.senderId === senderId ? 
+                          styles.yourMessage : 
+                          styles.otherMessage 
+                  )}
+                  timestamp={message.timestamp} />}
+                <TouchableOpacity onPress={() => setSelectedMessageIndex(index)}
                     style={StyleSheet.compose(
                       styles.messageContainer,
                       message.senderId === senderId
                         ? styles.sentMessageContainer
                         : styles.receivedMessageContainer
                     )}
-                  >
-                    <Text style={styles.messageText}>{message.message}</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+                >
+                  { message.messageType === 'text' || !message.messageType && <Text style={styles.messageText}>{message.message}</Text>}
+                  { message.messageType === 'fortune' && <FortuneMessage style={styles.messageFortune} fortune={message.message}/>}
+              </TouchableOpacity>
+          </View>
+            ))
+        }
+
+          <View style={{ padding: scrollPadding }}/>
           </ScrollView>
           
           <View style={styles.inputContainer}>
@@ -247,11 +275,15 @@ function Chat() {
         borderColor: "#E0E0E0",
         borderWidth: 1.5,
       },
-
       messageText: {
         borderRadius: 15,
         maxWidth: "80%",
         flexWrap: "wrap",
+      },
+      messageFortune: {
+        borderRadius: 15,
+        maxWidth: "80%",
+        padding: 60,
       },
       timestamp: {
         fontSize: 12,
@@ -266,7 +298,6 @@ function Chat() {
       },
       messageInput: {
         flex: 1,
-        // width: "80%",
         borderRadius: 10,
         padding: 10,
         borderWidth: 1,
