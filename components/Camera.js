@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, Platform, BackHandler, Button, Image } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Platform, BackHandler, Image } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-btr';
+import Button from './Button';
 import Gallery from './Gallery'
 import CustomAlert from './CustomAlert';
 
@@ -183,7 +184,7 @@ function MyCamera() {
           >
             <View style={styles.upperButtons}>
               
-              <Icon icon={"cross"} onPress={goBack} size={40}></Icon>
+              <Icon icon={"close"} onPress={goBack} size={40}></Icon>
               <Icon icon={"flash"} color={flashIconColor} onPress={() => {
                   flash === Camera.Constants.FlashMode.off
                   ? (setFlash(Camera.Constants.FlashMode.on), setFlashIconColor("yellow"), console.log(flash))
@@ -197,9 +198,9 @@ function MyCamera() {
           onBackdropPress={toggleBottomNavigationView}
           
         ><Gallery/></BottomSheet>
-              <Icon icon={"controller-stop"} onPress={toggleBottomNavigationView}size={60}></Icon>
-              <Icon icon={"circle"} onPress={takePicture} size={80}></Icon>
-              <Icon icon={"retweet"} onPress={toggleCameraType} size={40}></Icon>
+              <Icon icon={"image-multiple"} onPress={toggleBottomNavigationView} size={45}></Icon>
+              <Icon icon={"circle-outline"} onPress={takePicture} size={80}></Icon>
+              <Icon icon={"share"} onPress={toggleCameraType} size={50}></Icon>
             </View>
           </Camera>
         ) : (
@@ -207,9 +208,10 @@ function MyCamera() {
         )}
         <View>
           {photo &&
-            <View>
-              <Button title="Re-take" onPress={retakePicture}></Button>
-              <Button title="Save" onPress={savePicture}></Button>
+            <View style={styles.takenPhotoButtons}>
+              <Button textStyle={styles.takenPhotoBtn} title="Re-take" onPress={retakePicture}></Button>
+              <Button textStyle={styles.takenPhotoBtn} title="Save" onPress={savePicture}></Button>
+              <Button textStyle={styles.takenPhotoBtn} title="Send" onPress={savePicture}></Button>
             </View>
           }
         </View>
@@ -248,6 +250,14 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     margin: 10,
+  },
+  takenPhotoButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  takenPhotoBtn: {
+    fontSize: 15,
+    fontFamily: 'press-start',
   },
   upperButtons: {
     flexDirection: 'row',
