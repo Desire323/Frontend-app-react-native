@@ -39,21 +39,27 @@ function Fortune() {
 
     const fetchFortune = async () => {
       const token = await AsyncStorage.getItem('token');
-      let lastReceivedDate = await AsyncStorage.getItem('lastReceivedDate');
-      let lastFortune = await AsyncStorage.getItem('lastFortune');
+      
+      let lastReceivedDate = null;
+      let lastFortune = null;
     
-      lastFortune = lastFortune ? JSON.parse(lastFortune) : null;
-      lastReceivedDate = lastReceivedDate ? new Date(Number(lastReceivedDate)) : null;
+      const responseFromApi = await fortune_history_last(token);
+      if (responseFromApi && responseFromApi[0]) {
+        lastReceivedDate = new Date(responseFromApi[0].date);
+        lastFortune = responseFromApi[0];
     
-      let response = null;
-      if (!lastReceivedDate) {
-        response = await fortune_history_last(token)[0];
-        if (response) {
-          await AsyncStorage.setItem('lastReceivedDate', (new Date(response.date)).getTime().toString());
-          await AsyncStorage.setItem('lastFortune', JSON.stringify(response));
-        }
+        await AsyncStorage.setItem('lastReceivedDate', lastReceivedDate.getTime().toString());
+        await AsyncStorage.setItem('lastFortune', JSON.stringify(lastFortune));
+      } else {
+
+        let storedLastReceivedDate = await AsyncStorage.getItem('lastReceivedDate');
+        let storedLastFortune = await AsyncStorage.getItem('lastFortune');
+    
+        lastFortune = storedLastFortune ? JSON.parse(storedLastFortune) : null;
+        lastReceivedDate = storedLastReceivedDate ? new Date(Number(storedLastReceivedDate)) : null;
       }
     
+      let response = null;
       if (lastReceivedDate && isToday(lastReceivedDate)) {
         console.log('You already received a fortune today!');
         response = lastFortune;
@@ -75,6 +81,7 @@ function Fortune() {
         }, 3500);
       }
     };
+    
     
 
   return (
