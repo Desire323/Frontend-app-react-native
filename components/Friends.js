@@ -77,6 +77,7 @@ function Friends() {
           style={{maxHeight: '85%'}}>
         {people.map((person) => (
           <PersonCard
+            key={person.id}
             person={person}
             handlePress={handlePress}
           />
