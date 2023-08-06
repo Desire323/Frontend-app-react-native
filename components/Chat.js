@@ -25,8 +25,6 @@ function Chat() {
     const [selectedMessageIndex, setSelectedMessageIndex] = useState(null);
     const [chatWithName, setChatWithName] = useState(null);
     const [messageInputClicked, setMessageInputClicked] = useState(false);
-    const [scrollPadding, setScrollPadding] = useState(50);
-
     
 
     const textInputRef = useRef();
@@ -135,9 +133,7 @@ function Chat() {
          <ScrollView
             ref={scrollViewRef}
             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-            style={styles.messagesList}
-            contentContainerStyle={{paddingBottom: 50}}
-        >
+            style={styles.messagesList}>
 
 
 {messages &&
@@ -159,14 +155,14 @@ function Chat() {
                         : styles.receivedMessageContainer
                     )}
                 >
-                  { message.messageType === 'text' || !message.messageType && <Text style={styles.messageText}>{message.message}</Text>}
-                  { message.messageType === 'fortune' && <FortuneMessage style={styles.messageFortune} fortune={message.message}/>}
+                  { !message.messageType && <Text style={styles.messageText}>{message.message}</Text>}
+                  { message.messageType === 'text' && <Text style={styles.messageText}>{message.message}</Text>}
+                  { message.messageType === 'fortune' && <FortuneMessage style={styles.messageFortune} fortune={message.message}>Ako sloja tekst shte raboti li?</FortuneMessage>}
               </TouchableOpacity>
           </View>
             ))
         }
-
-          <View style={{ padding: scrollPadding }}/>
+      {/* </View> */}
           </ScrollView>
           
           <View style={styles.inputContainer}>
@@ -283,7 +279,7 @@ function Chat() {
       messageFortune: {
         borderRadius: 15,
         maxWidth: "80%",
-        padding: 60,
+        maxHeight: 300,
       },
       timestamp: {
         fontSize: 12,
