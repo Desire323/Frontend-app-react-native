@@ -7,7 +7,7 @@ import { getConversationId, getLastMessage } from './api/chat_api';
 import { getFriends } from './api/persons_api';
 import PersonCard from './PersonCard';
 
-function ChatsList() {
+function ChatsList({showTabBar}) {
   const navigation = useNavigation();
   const [people, setPeople] = useState([]);
   const [token, setToken] = useState(null);
@@ -61,7 +61,7 @@ function ChatsList() {
       console.log('Self ID: ' + selfId);
       console.log('Receiver ID: ' + personId);
       const conversationId = await getConversationId(token, personId);
-      console.log('Conversation ID:', conversationId);
+      console.log('Conversation ID:', await conversationId);
       await AsyncStorage.setItem('conversationId', conversationId);
       await AsyncStorage.setItem('receiverId', JSON.stringify(personId));
       await AsyncStorage.setItem('chatWithName', `${firstname} ${lastname}`);
@@ -91,7 +91,7 @@ function ChatsList() {
         ))}
       </ScrollView>
       </View>
-      <TabBar />
+      {showTabBar !== false && <TabBar style={styles.tabBar}/>}
     </View>
   );
 }
@@ -115,6 +115,9 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     height: '85%',
     width: '100%',
+  },
+  tabBar: {
+    backgroundColor: '#ececec',
   },
 });
 
