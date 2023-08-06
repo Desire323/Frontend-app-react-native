@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   modalMessage: {
     marginBottom: 15,
     textAlign: "center",
-    fontFamily: 'Verdana',
+    fontFamily: 'Roboto',
     fontSize: 15,
   }
 });
