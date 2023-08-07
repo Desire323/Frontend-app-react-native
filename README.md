@@ -1,1 +1,1 @@
-# ReactNativeHello
+# Frontend app with react native
