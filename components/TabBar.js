@@ -12,7 +12,7 @@ function TabBar({style}) {
 
             <Icon icon={"chat"} color={"black"} onPress={() => navigation.navigate("Chats")}/>
             <Icon icon={"crystal-ball"} color={"black"} onPress={() => navigation.navigate("Fortune")}/>
-            <Icon icon={"account-multiple"} color={"black"} onPress={() => navigation.navigate("Friends")}/>
+            <Icon icon={"account-multiple"} color={"black"} onPress={() => navigation.navigate("AddFriends")}/>
             <Icon icon={"cog"} color={"black"} onPress={() => navigation.navigate("Settings")}/>
 
         </View>
