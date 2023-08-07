@@ -71,23 +71,25 @@ function Chat() {
             });
             
             setClient(stompClient);
+            fetchShareFortune();
         };
         
-        fetchShareFortune = async () => {
-        const shareFortune = await AsyncStorage.getItem('shareFortune');
-        
-        try{ 
-          if (shareFortune) {
-            client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': shareFortune, 'messageType': 'fortune'}));
-            AsyncStorage.removeItem('shareFortune');
+        const fetchShareFortune = async () => {
+          const shareFortune = await AsyncStorage.getItem('shareFortune');
+          console.log("NEW share fortune => " + shareFortune);
+  
+          try{ 
+              if (shareFortune) {
+                  client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': shareFortune, 'messageType': 'fortune'}));
+                  await AsyncStorage.removeItem('shareFortune');
+              }
+          } catch (error) {
+              console.log("No fortune for sharing: ", error);
           }
-        }catch (error) {
-            console.log("No fortune for sharing: ", error);
-          }
-        }
+      }
 
         initializeChat();
-        fetchShareFortune();
+        
 
         return () => {
             if (client) {
