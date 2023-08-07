@@ -16,6 +16,7 @@ function Fortune() {
   const [animation, setAnimation] = useState(false);
   const [theme, setTheme] = useState(null);
   const [styles, setStyles] = useState(StyleManager({theme: theme}));
+  const [unlimited, setUnlimited] = useState(false)
   
   useEffect(() => {
     handleTokenExpiration();
@@ -60,7 +61,7 @@ function Fortune() {
       }
     
       let response = null;
-      if (lastReceivedDate && isToday(lastReceivedDate)) {
+      if ( !unlimited && lastReceivedDate && isToday(lastReceivedDate)) {
         console.log('You already received a fortune today!');
         response = lastFortune;
       }
@@ -100,6 +101,9 @@ function Fortune() {
           </TouchableOpacity>
           <TouchableOpacity onPress={fetchHistory}>
             <Text style={StyleSheet.compose(styles.text, {paddingTop:100})}>history</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setUnlimited(!unlimited)}>
+            <Text style={[styles.text, {paddingTop:50}, unlimited ? {color:"green"} : {color:"red"}]}>UNLIMITED</Text>
           </TouchableOpacity>
         </View>
       )}
