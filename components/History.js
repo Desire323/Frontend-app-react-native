@@ -70,9 +70,10 @@ function History() {
         }
     };
     
-    handleShare = async () => {
+    const handleShare = async () => {
         console.log("Share: " + JSON.stringify(history[currentIndex]))
-        AsyncStorage.setItem('shareFortune', JSON.stringify(history[currentIndex]));
+        await AsyncStorage.setItem('shareFortune', JSON.stringify(history[currentIndex]));
+        console.log("Share fortune -> " + await AsyncStorage.getItem('shareFortune'));
         setModalVisible(true);
     };
 
