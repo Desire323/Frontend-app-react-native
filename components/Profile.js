@@ -3,9 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import TabBar from './TabBar';
 import { getFriendsCount } from './api/persons_api';
+import { useNavigation } from '@react-navigation/native';
 
 function Profile() {
-
+    const navigation = useNavigation()
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
     const [friendsCount, setFriendsCount] = useState() 
@@ -30,7 +31,7 @@ function Profile() {
                 style={styles.profile}
             />
             <Text style={styles.name}> {firstname} {lastname}</Text>
-            <TouchableOpacity onPress={console.log("Friends count: " + JSON.stringify(friendsCount))}>
+            <TouchableOpacity onPress={() => navigation.navigate("Chats")}>
                 <View style={styles.friendsCountContainer}>
                {friendsCount !== null && <Text style={styles.text}>{friendsCount}</Text>}
                 <Text style={styles.text}>Friends</Text>
