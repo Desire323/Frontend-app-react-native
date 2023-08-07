@@ -15,7 +15,7 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import ChatsList from './components/ChatsList';
 import Chat from './components/Chat';
-import Friends from './components/Friends';
+import AddFriends from './components/AddFriends';
 import NotificationScreen from './components/notifications/Notifications';
 import FortuneMessage from './components/FortuneMessage';
 
@@ -104,8 +104,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Friends"
-          component={Friends}
+          name="AddFriends"
+          component={AddFriends}
           options={{ headerShown: false }}
         />
         <Stack.Screen

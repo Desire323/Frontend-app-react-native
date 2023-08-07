@@ -7,7 +7,7 @@ import { getAllPersons, getFriends, makeFriends } from './api/persons_api';
 import CustomAlert from './CustomAlert';
 import PersonCard from './PersonCard';
 
-function Friends() {
+function AddFriends() {
   const navigation = useNavigation();
   const [people, setPeople] = useState([]);
   const [token, setToken] = useState(null);
@@ -71,7 +71,7 @@ function Friends() {
       onClose={() => setShowAlert(false)}
     />
 
-      <Text style={styles.heading}>Friends</Text>
+      <Text style={styles.heading}>Add Friends</Text>
       <View style={styles.scrollViewContainer}>
       <ScrollView
           style={{maxHeight: '85%'}}>
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Friends;
+export default AddFriends;
