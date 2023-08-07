@@ -2,7 +2,7 @@ import ApiManager from "./ApiManager";
 
 const fortune_random = async (token) => {
     try {
-        const response = await ApiManager.post('/fortune/random', {
+        const response = await ApiManager.post('/fortune/random', {}, {
             headers: { Authorization: `Bearer ${token}` },
         });
         return response.data ? response.data : response;
