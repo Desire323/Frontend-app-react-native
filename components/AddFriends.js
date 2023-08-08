@@ -23,7 +23,21 @@ function AddFriends() {
       setToken(token);
       const response = await getAllPersons(token);
       const friends = await getFriends(JSON.parse(selfId), token);
-      setPeople(response.filter((person) => person.id !== JSON.parse(selfId) && !friends.some(friend => friend.id === person.id)));
+      if (response && friends) {
+        function isFriend(personId) {
+          for (let i = 0; i < friends.length; i++) {
+            if (friends[i].id === personId) return true;
+          }
+          return false;
+        }
+        
+        setPeople(response.filter((person) => person.id !== JSON.parse(selfId) && !isFriend(person.id)));
+        
+      }
+      else if(response){
+        setPeople(response.filter((person) => person.id !== JSON.parse(selfId)));
+      }
+
     } catch (error) {
       console.error('Error getting people:', error);
     }
