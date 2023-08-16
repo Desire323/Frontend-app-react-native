@@ -20,10 +20,13 @@ function ChatsList({showTabBar}) {
       setToken(token);
       setSelfId(selfId);
       const response = await getFriends(selfId, token);
+      console.log(response)
       if (response) {
         setPeople(response.filter((person) => person.id !== JSON.parse(selfId)));
       }
-
+      else {
+        response = [];
+      }
       const updatedPeople = await Promise.all(response.map(async (person) => {
         const conversationId = await getConversationId(token, person.id);
 
