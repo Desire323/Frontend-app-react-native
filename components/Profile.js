@@ -19,7 +19,9 @@ function Profile() {
             setFirstname(await AsyncStorage.getItem('firstname'));
             setLastname(await AsyncStorage.getItem('lastname'));
             const friendsCount = await getFriendsCount(selfId, token)
-            setFriendsCount(friendsCount);
+            console.log("Friends count: " + friendsCount.data);
+            
+            setFriendsCount(friendsCount ? friendsCount : 0);
         };
         getProfileInfo();
     }, []);
