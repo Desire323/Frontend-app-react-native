@@ -29,7 +29,22 @@ function Chat() {
 
     const textInputRef = useRef();
     const scrollViewRef = useRef();
-
+    
+    const fetchShareFortune = async () => {
+  
+      const shareFortune = await AsyncStorage.getItem('shareFortune');
+      console.log("Chat: NEW share fortune => " + shareFortune);
+  
+      try { 
+          if (shareFortune) {
+              client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': shareFortune, 'messageType': 'fortune'}));
+              await AsyncStorage.removeItem('shareFortune');
+          }
+      } catch (error) {
+          console.log("No fortune for sharing: ", error);
+      }
+  };
+  
       useEffect(() => {
         const initializeChat = async () => {
             const token = await AsyncStorage.getItem('token');
@@ -71,25 +86,13 @@ function Chat() {
             });
             
             setClient(stompClient);
-            fetchShareFortune();
-        };
-        
-        const fetchShareFortune = async () => {
-          const shareFortune = await AsyncStorage.getItem('shareFortune');
-          console.log("NEW share fortune => " + shareFortune);
-  
-          try{ 
-              if (shareFortune) {
-                  client.send("/app/private-chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'message': shareFortune, 'messageType': 'fortune'}));
-                  await AsyncStorage.removeItem('shareFortune');
-              }
-          } catch (error) {
-              console.log("No fortune for sharing: ", error);
-          }
-      }
+            // fetchShareFortune(stompClient);
 
-        initializeChat();
+          };
         
+          initializeChat();
+        // initializeChat();
+        // fetchShareFortune();
 
         return () => {
             if (client) {
@@ -100,6 +103,11 @@ function Chat() {
         };
     }, []);
     
+    useEffect(() => {
+      setTimeout(() => {
+        fetchShareFortune();  
+      }, 2003)
+    },[client])
 
     useEffect(() => { setTimeout(() => {
         setSelectedMessageIndex(null) }, 4000); 
@@ -159,7 +167,7 @@ function Chat() {
                 >
                   { !message.messageType && <Text style={styles.messageText}>{message.message}</Text>}
                   { message.messageType === 'text' && <Text style={styles.messageText}>{message.message}</Text>}
-                  { message.messageType === 'fortune' && <FortuneMessage style={styles.messageFortune} fortune={message.message}>Ako sloja tekst shte raboti li?</FortuneMessage>}
+                  { message.messageType === 'fortune' && <FortuneMessage style={styles.messageFortune} fortune={message.message}></FortuneMessage>}
               </TouchableOpacity>
           </View>
             ))
@@ -196,7 +204,7 @@ function Chat() {
                 icon={"share-variant"}
                 color={"black"}
                 size={28}
-                onPress={handleSubmit}
+                onPress={(handleSubmit)}
               />
             </View>}
             <TextInput
@@ -280,7 +288,9 @@ function Chat() {
       },
       messageFortune: {
         borderRadius: 15,
+        width:"80%",
         maxWidth: "80%",
+        height: 300,
         maxHeight: 300,
       },
       timestamp: {
